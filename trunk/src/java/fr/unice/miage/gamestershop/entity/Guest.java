@@ -6,7 +6,7 @@
 package fr.unice.miage.gamestershop.entity;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,24 +33,22 @@ public class Guest implements Serializable {
     private String surname;
     @Column(nullable=false)
     private String firstname;
-    private Timestamp dateOfBirth;
     @OneToOne
     private Contact contact;
     @JoinColumn(nullable=false)
-    @OneToOne
+    @OneToOne(cascade= CascadeType.PERSIST, optional=false, orphanRemoval=true)
     private Address billingAddress;
-    @OneToOne
+    @OneToOne(cascade= CascadeType.PERSIST, optional=true, orphanRemoval=true)
     private Address shippingAddress;
 
     public Guest() {
     }
 
-    public Guest(String email, String password, String surname, String firstname, Timestamp dateOfBirth, Contact contact, Address billingAddress, Address shippingAddress) {
+    public Guest(String email, String password, String surname, String firstname, Contact contact, Address billingAddress, Address shippingAddress) {
         this.email = email;
         this.password = password;
         this.surname = surname;
         this.firstname = firstname;
-        this.dateOfBirth = dateOfBirth;
         this.contact = contact;
         this.billingAddress = billingAddress;
         this.shippingAddress = shippingAddress;
@@ -70,14 +68,6 @@ public class Guest implements Serializable {
 
     public void setContact(Contact contact) {
         this.contact = contact;
-    }
-
-    public Timestamp getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Timestamp dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
     }
 
     public String getEmail() {

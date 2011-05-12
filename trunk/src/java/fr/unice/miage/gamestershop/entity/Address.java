@@ -33,12 +33,12 @@ public class Address implements Serializable {
     private String city;
     @Column(nullable=false)
     private String countrie;
-    private String isShippingAddress;
+    private boolean isShippingAddress;
 
     public Address() {
     }
 
-    public Address(int number, String road, String suppInfos, String zipCode, String city, String countrie, String isShippingAddress) {
+    public Address(int number, String road, String suppInfos, String zipCode, String city, String countrie, boolean isShippingAddress) {
         this.number = number;
         this.road = road;
         this.suppInfos = suppInfos;
@@ -72,11 +72,11 @@ public class Address implements Serializable {
         this.id = id;
     }
 
-    public String getIsShippingAddress() {
+    public boolean getIsShippingAddress() {
         return isShippingAddress;
     }
 
-    public void setIsShippingAddress(String isShippingAddress) {
+    public void setIsShippingAddress(boolean isShippingAddress) {
         this.isShippingAddress = isShippingAddress;
     }
 
