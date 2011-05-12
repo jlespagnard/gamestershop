@@ -38,6 +38,9 @@ public class DispatchActionHeader extends HttpServlet {
             else if (actionHeader.equals("profilPanel")) {
                 forwardTo = "profil.jsp";
             }
+            else if (actionHeader.equals("home")) {
+                forwardTo = "home.jsp";
+            }
             else if(actionHeader.equals("basket")) {
                 forwardTo = "GetBasketContent";
             }

@@ -55,11 +55,11 @@ function showConnectionDialog() {
 function connectGuest() {
     $.post("ConnectGuest", {email:$("#email").val(), password:$("#password").val()}, function(success) {
         if(success) {
-            location.refresh();
+            location.reload();
             dijit.byId('connectionDialog').hide();
         }
         else {
             new dijit.Dialog({title: "Erreur", content: "Bad email/password"}).show();
         }
-    });
+    },"json");
 }

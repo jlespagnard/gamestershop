@@ -72,7 +72,6 @@ public class UpdateGuestProfil extends HttpServlet {
         String addressCityGuest = request.getParameter("addressCityGuest");
         String addressCountrieGuest = request.getParameter("addressCountrieGuest");
         Address billingAddress = guest.getBillingAddress();
-        System.out.println("ADRESSE NUMBER GUEST = " + addressNumberGuest);
         billingAddress.setNumber(Integer.parseInt(addressNumberGuest));
         billingAddress.setRoad(addressRoadGuest);
         billingAddress.setSuppInfos(addressInfoSuppGuest);
@@ -82,7 +81,7 @@ public class UpdateGuestProfil extends HttpServlet {
         
         String hasShippingAddress = request.getParameter("hasShippingAddress");
         Address shippingAddress = null;
-        if(hasShippingAddress != null && hasShippingAddress.equalsIgnoreCase("true")) {
+        if(hasShippingAddress != null && hasShippingAddress.equalsIgnoreCase("on")) {
             shippingAddress = guest.getShippingAddress();
             if(shippingAddress == null) {
                 shippingAddress = new Address();
