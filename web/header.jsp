@@ -29,15 +29,54 @@
             dojo.require("dojo.parser");
             dojo.require("dojo.fx");
             dojo.require("dijit.Dialog");
+            dojo.require("dijit.form.Form");
+            dojo.require("dijit.form.NumberTextBox");
+            dojo.require("dijit.form.CheckBox");
+            dojo.require("dijit.form.ValidationTextBox");
+            dojo.require("dijit.form.TextBox");
+            dojo.require("dijit.form.Button");
+            dojo.require("dijit.layout.AccordionContainer");
         </script>
-        <script src="js/script.js" type="text/javascript"></script>
+        <script src="js/script.js" type="text/javascript" djConfig="parseOnLoad: true"></script>
         <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/nihilo/nihilo.css" />
         <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/image/resources/image.css">
         <link rel="stylesheet" href="css/default.css" />        
     </head>
     <body class="nihilo">
         <div dojoType="dijit.layout.BorderContainer" style="width: 100%; height: 100%">
-            <div dojoType="dijit.layout.ContentPane" region="top">
-                Bonsoir le monde !<br />
-                <a style="float: right; position: relative;" href="basket.jsp">Panier</a>
+            <div id="headerPane" name="headerPane" dojoType="dijit.layout.ContentPane" region="top" refreshOnShow="true">
+                ${msgHome}<br />
+                <div style="position: relative; float: right;">
+                    <form action="DispatchActionHeader" method="POST">
+                        <c:choose>
+                            <c:when test="${sessionScope['guest'] == null}">
+                                <img src="images/login.png" onclick="showConnectionDialog();" />&nbsp;
+                            </c:when>
+                            <c:otherwise>
+                                <input type="image" src="images/profil.png" onclick="$('#actionHeader').val('profilPanel');" />&nbsp;
+                            </c:otherwise>
+                        </c:choose>
+                        
+                        <input type="image" src="images/admin.png" onclick="$('#actionHeader').val('adminPanel');" />&nbsp;
+                        <input type="image" src="images/caddie.png" onclick="$('#actionHeader').val('basket');" />
+                        <input type="hidden" id="actionHeader" name="actionHeader" value="" />
+                    </form>
+                </div>
+            </div>
+            <div dojoType="dijit.Dialog" id="connectionDialog" jsId="connectionDialog" title="Connection">
+                <div dojoType="dijit.form.Form" id="connectionForm" jsId="connectionForm" encType="multipart/form-data" action="" method="">
+                    <table>
+                        <tr>
+                            <td>Email</td>
+                            <td><input type="text" id="email" name="email" required="true" trim="true" dojoType="dijit.form.TextBox" /></td>
+                        </tr>
+                        <tr>
+                            <td>Mot de passe</td>
+                            <td><input type="password" id="password" name="password" required="true" trim="true" dojoType="dijit.form.TextBox" /></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="float:right;position:relative;"><button dojoType="dijit.form.Button" name="connectGuestButton" onclick="connectGuest()">Connection</button></td>
+                        </tr>
+                    </table>
+                </div>
             </div>

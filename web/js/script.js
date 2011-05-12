@@ -12,7 +12,6 @@ function getGamesByPlatform(idPlatform) {
 
 function addToBasket(idGame) {
     $.post("AddToBasket", {idGame : idGame}, function(game){
-        alert(game);
         var thisdialog = new dijit.Dialog({title: "Information", content: "Article ajout&eacute; au panier"});
 
         var spanAv = ("#available_"+idGame);
@@ -30,14 +29,37 @@ function addToBasket(idGame) {
 }
 
 function modifierQuantite(idGame, price) {
+    var oldSubTotal = $("#subTotal_"+idGame).html();
     var quantite = $("#quantity_"+idGame).val();
     $("#subTotal_"+idGame).html(quantite*price);
     
-    var total = 0;
-    var quantites = $(".quantite");
-    var subTotals = $(".subTotal");
-    for(var i in quantites) {
-        total = total + quantites[i].val()*parseInt(subTotals[i].html());
+    var totalPrice = $("#totalPrice").html();
+    totalPrice = totalPrice-oldSubTotal;
+    totalPrice = totalPrice+(quantite*price);
+    $("#totalPrice").html(totalPrice);
+}
+
+function addRemoveShippingAddress() {    
+    if(dijit.byId("hasShippingAddress").checked) {
+        $("#divShippingAddress").attr("style", "visibility: visible;");
     }
-    $("#totalPrice").html(total);
+    else {
+        $("#divShippingAddress").attr("style", "visibility: hidden;");
+    }
+}
+
+function showConnectionDialog() {
+    dijit.byId('connectionDialog').show();
+}
+
+function connectGuest() {
+    $.post("ConnectGuest", {email:$("#email").val(), password:$("#password").val()}, function(success) {
+        if(success) {
+            location.refresh();
+            dijit.byId('connectionDialog').hide();
+        }
+        else {
+            new dijit.Dialog({title: "Erreur", content: "Bad email/password"}).show();
+        }
+    });
 }

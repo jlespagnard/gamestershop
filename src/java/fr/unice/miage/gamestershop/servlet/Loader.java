@@ -5,14 +5,17 @@
 
 package fr.unice.miage.gamestershop.servlet;
 
+import fr.unice.miage.gamestershop.entity.Address;
 import fr.unice.miage.gamestershop.entity.Game;
 import fr.unice.miage.gamestershop.entity.GameGender;
 import fr.unice.miage.gamestershop.entity.GamePlatform;
+import fr.unice.miage.gamestershop.entity.Guest;
 import fr.unice.miage.gamestershop.entity.LineItem;
 import fr.unice.miage.gamestershop.enumeration.Pegi;
 import fr.unice.miage.gamestershop.manager.GameGenderManager;
 import fr.unice.miage.gamestershop.manager.GameManager;
 import fr.unice.miage.gamestershop.manager.GamePlatformManager;
+import fr.unice.miage.gamestershop.manager.GuestManager;
 import fr.unice.miage.gamestershop.utils.GameParser;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -43,11 +46,16 @@ public class Loader extends HttpServlet {
     private GamePlatformManager platformManager;
     @EJB
     private GameGenderManager genderManager;
+    @EJB
+    private GuestManager guestMManager;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
+        Guest guest = new Guest("toto@titi.fr", "1234", "toto", "titi", null, new Address(21, "Jump Street", "#App 69", "56437", "New-York", "Les Stazunis", false), null);
+        guestMManager.save(guest);
+        
         GamePlatform platform = new GamePlatform("Nintendo DS");
         platformManager.save(platform);
         platform = new GamePlatform("Nintendo 3DS");

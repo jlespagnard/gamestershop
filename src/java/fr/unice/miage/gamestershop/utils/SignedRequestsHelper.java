@@ -180,7 +180,7 @@ public class SignedRequestsHelper {
         try {
             data = stringToSign.getBytes(UTF8_CHARSET);
             rawHmac = mac.doFinal(data);
-            Base64 encoder = new Base64();
+            Base64 encoder = new Base64(76, new byte[0]);
             signature = new String(encoder.encode(rawHmac));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(UTF8_CHARSET + " is unsupported!", e);

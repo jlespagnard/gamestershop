@@ -2,33 +2,28 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package fr.unice.miage.gamestershop.servlet;
 
-import fr.unice.miage.gamestershop.entity.Game;
-import fr.unice.miage.gamestershop.entity.LineItem;
-import fr.unice.miage.gamestershop.manager.GameManager;
+import fr.unice.miage.gamestershop.entity.Guest;
+import fr.unice.miage.gamestershop.manager.GuestManager;
 import java.io.IOException;
-import java.util.Collection;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import org.json.JSONObject;
 
 /**
  * @author Julien LESPAGNARD
  * @author Anthony BONIN
  */
-@WebServlet(name="AddToBasket", urlPatterns={"/AddToBasket"})
-public class AddToBasket extends HttpServlet {
+@WebServlet(name = "ConnectGuest", urlPatterns = {"/ConnectGuest"})
+public class ConnectGuest extends HttpServlet {
 
     @EJB
-    private GameManager gameManager;
-
+    private GuestManager guestManager;
+    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -37,25 +32,19 @@ public class AddToBasket extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Collection<LineItem> items = (Collection<LineItem>)session.getAttribute("basket");
-
-        int idGame = Integer.parseInt(request.getParameter("idGame"));
-        Game game = gameManager.getGameById(idGame);
-
-        LineItem line = new LineItem(game, 1, game.getPrice());
-        items.add(line);
-        session.setAttribute("basket", items);
-
-        game.setRemainingQuantity(game.getRemainingQuantity()-1);
-        if(game.getRemainingQuantity() == 0) {
-            game.setIsAvailable(false);
+            throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        
+        Guest guest = null;
+        if(email != null && password != null) {
+            guest = guestManager.getGuestByEmailAndPassword(email, password);
+            if(guest != null && guest.getId() > 0) {
+                request.getSession().setAttribute("guest", guest);
+            }
         }
-        game = gameManager.save(game);
-
-        JSONObject jsonObj = new JSONObject(game);
-        response.getWriter().print(jsonObj);
+        
+        response.getWriter().print((guest != null && guest.getId() > 0));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -68,9 +57,9 @@ public class AddToBasket extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
-    } 
+    }
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -81,7 +70,7 @@ public class AddToBasket extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -93,5 +82,4 @@ public class AddToBasket extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
