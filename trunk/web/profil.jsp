@@ -11,7 +11,7 @@
 <c:set var="g" value="${sessionScope['guest']}" />
 <div id="content" name="content" dojoType="dijit.layout.ContentPane" region="center">
     <div style="margin:auto;">
-        <div dojoType="dijit.form.Form" id="updateGuestProfil" jsId="updateGuestProfil" encType="multipart/form-data" action="UpdateGuestProfil" method="POST">
+        <form action="UpdateGuestProfil" method="POST">
             <table>
                 <tr>
                     <td>Surname</td>
@@ -107,7 +107,7 @@
                 </table>
             </div>
             <button type="submit" dojoType="dijit.form.Button" style="float: right;position: relative;" name="updateProfil">Update</button>
-        </div>
+        </form>
     </div>
 </div>
 <%@include file="footer.jsp" %>

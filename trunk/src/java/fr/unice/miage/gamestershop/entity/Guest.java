@@ -36,9 +36,9 @@ public class Guest implements Serializable {
     @OneToOne
     private Contact contact;
     @JoinColumn(nullable=false)
-    @OneToOne(cascade= CascadeType.PERSIST, optional=false, orphanRemoval=true)
+    @OneToOne(cascade= CascadeType.ALL, optional=false)
     private Address billingAddress;
-    @OneToOne(cascade= CascadeType.PERSIST, optional=true, orphanRemoval=true)
+    @OneToOne(cascade= CascadeType.ALL, optional=true)
     private Address shippingAddress;
 
     public Guest() {

@@ -48,17 +48,23 @@
                 ${msgHome}<br />
                 <div style="position: relative; float: right;">
                     <form action="DispatchActionHeader" method="POST">
+                        <input type="image" id="imgHome" src="images/home.png" onclick="$('#actionHeader').val('home');" />
+                        <span dojoType="dijit.Tooltip" connectId="imgHome">Home</span>&nbsp;
                         <c:choose>
                             <c:when test="${sessionScope['guest'] == null}">
-                                <img src="images/login.png" onclick="showConnectionDialog();" />&nbsp;
+                                <img src="images/login.png" id="imgLogin" onclick="showConnectionDialog();" />
+                                <span dojoType="dijit.Tooltip" connectId="imgLogin">Login</span>&nbsp;
                             </c:when>
                             <c:otherwise>
-                                <input type="image" src="images/profil.png" onclick="$('#actionHeader').val('profilPanel');" />&nbsp;
+                                <input type="image" src="images/profil.png" id="imgProfil" onclick="$('#actionHeader').val('profilPanel');" />
+                                <span dojoType="dijit.Tooltip" connectId="imgProfil">Profil</span>&nbsp;
                             </c:otherwise>
                         </c:choose>
                         
-                        <input type="image" src="images/admin.png" onclick="$('#actionHeader').val('adminPanel');" />&nbsp;
-                        <input type="image" src="images/caddie.png" onclick="$('#actionHeader').val('basket');" />
+                        <input type="image" src="images/admin.png" id="imgAdmin" onclick="$('#actionHeader').val('adminPanel');" />
+                        <span dojoType="dijit.Tooltip" connectId="imgAdmin">Admin Console</span>&nbsp;
+                        <input type="image" src="images/caddie.png" id="imgBasket" onclick="$('#actionHeader').val('basket');" />
+                        <span dojoType="dijit.Tooltip" connectId="imgBasket">Basket</span>
                         <input type="hidden" id="actionHeader" name="actionHeader" value="" />
                     </form>
                 </div>
