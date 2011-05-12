@@ -34,6 +34,7 @@ public class Game implements Serializable {
     private int id;
     @Column(nullable=false)
     private String name;
+    @Column(length=20000)
     private String description;
     private String urlCover;
     @Column(nullable=false)
@@ -52,17 +53,16 @@ public class Game implements Serializable {
     @JoinColumn(nullable=false)
     @ManyToOne
     private GamePlatform platform;
-    private boolean isMultiPlayer;
-    private int nbPlayers;
     private Collection<Pegi> pegis = null;
     private Collection<String> urlVideos = null;
     private Collection<String> urlScreenshots = null;
     private Collection<String> keyWords = null;
+    private Collection<String> features = null;
 
     public Game() {
     }
 
-    public Game(String name, String description, String urlCover, String developer, String publisher, Date release, BigDecimal price, boolean isAvailable, int remainingQuantity, Collection<GameGender> genders, GamePlatform platform, boolean isMultiPlayer, int nbPlayers) {
+    public Game(String name, String description, String urlCover, String developer, String publisher, Date release, BigDecimal price, boolean isAvailable, int remainingQuantity, Collection<GameGender> genders, Collection<String> urlScreenshots, Collection<String> features, GamePlatform platform, Collection<Pegi> pegis) {
         this.name = name;
         this.description = description;
         this.urlCover = urlCover;
@@ -72,10 +72,11 @@ public class Game implements Serializable {
         this.price = price;
         this.isAvailable = isAvailable;
         this.remainingQuantity = remainingQuantity;
+        this.urlScreenshots = urlScreenshots;
+        this.features = features;
         this.genders = genders;
         this.platform = platform;
-        this.isMultiPlayer = isMultiPlayer;
-        this.nbPlayers = nbPlayers;
+        this.pegis = pegis;
     }
 
     public String getDescription() {
@@ -118,10 +119,6 @@ public class Game implements Serializable {
         this.isAvailable = isAvailable;
     }
 
-    public boolean isIsMultiPlayer() {
-        return isMultiPlayer;
-    }
-
     public Collection<String> getKeyWords() {
         return keyWords;
     }
@@ -139,24 +136,12 @@ public class Game implements Serializable {
         }
     }
 
-    public void setIsMultiPlayer(boolean isMultiPlayer) {
-        this.isMultiPlayer = isMultiPlayer;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getNbPlayers() {
-        return nbPlayers;
-    }
-
-    public void setNbPlayers(int nbPlayers) {
-        this.nbPlayers = nbPlayers;
     }
 
     public Collection<Pegi> getPegis() {
@@ -227,7 +212,14 @@ public class Game implements Serializable {
     public void setUrlScreenshots(Collection<String> urlScreenshots) {
         this.urlScreenshots = urlScreenshots;
     }
+    
+    public Collection<String> getFeatures() {
+        return features;
+    }
 
+    public void setFeatures(Collection<String> features) {
+        this.features = features;
+    }
     public Collection<String> getUrlVideos() {
         return urlVideos;
     }

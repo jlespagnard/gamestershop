@@ -10,19 +10,13 @@ package fr.unice.miage.gamestershop.enumeration;
  * @author Anthony BONIN
  */
 public enum Pegi {
-    PEGI_3("images/pegis/pegi_3.gif","S'adresse &agrave; des personnes de tous &acirc;ges",false),
-    PEGI_7("images/pegis/pegi7.gif","Interdit aux moins de 7 ans",false),
-    PEGI_12("images/pegis/pegi_12.gif","Interdit aux moins de 12 ans",false),
-    PEGI_16("images/pegis/pegi_16.gif","Interdit aux moins de 16 ans",false),
-    PEGI_18("images/pegis/pegi_18.gif","Interdit aux moins de 18 ans",false),
-    PEGI_LANGUAGE("images/pegis/pegi_lang.gif","Ce jeu contient des expressions grossi&egrave;res.",true),
-    PEGI_DISCRIMINATION("images/pegis/pegi_discrim.gif","Ce jeu contient des images ou des &eacute;l&eacute;ments susceptibles d’inciter &agrave; la discrimination.",true),
-    PEGI_VIOLENCE("images/pegis/pegi_violence.gif","Ce jeu contient des sc&egrave;nes violentes.",true),
-    PEGI_DRUG("images/pegis/pegi_drug.gif","Ce jeu illustre ou se r&eacute;f&egrave;re &agrave; la consommation de drogues.",true),
-    PEGI_FEAR("images/pegis/pegi_fear.gif","Ce jeu risque de faire peur aux jeunes enfants.",true),
-    PEGI_HASARD("images/pegis/pegi_hasard.gif","Ce jeu incite &agrave; jouer aux jeux de hasard ou enseigne leurs règles.",true),
-    PEGI_SEX("images/pegis/pegi_sex.gif","Ce jeu montre des sc&egrave;nes de nudit&eacute; et/ou des comportements ou des allusions de nature sexuelle.",true),
-    PEGI_ONLINE("images/pegis/pegi_online.gif","Possibilit&eacute; de jouer &agrave; ce jeu en ligne.",true);
+    ESRB_CHILDHOOD("images/pegis/ESRB_1.PNG","Titles rated EC (Early Childhood) have content that may be suitable for ages 3 and older. Contains no material that parents would find inappropriate.",false),
+    ESRB_EVERYONE("images/pegis/ESRB_2.PNG","Titles rated E (Everyone) have content that may be suitable for ages 6 and older. Titles in this category may contain minimal cartoon, fantasy or mild violence and/or infrequent use of mild language.",false),
+    ESRB_10("images/pegis/ESRB_3.PNG","Titles rated E10+ (Everyone 10 and older) have content that may be suitable for ages 10 and older. Titles in this category may contain more cartoon, fantasy or mild violence, mild language and/or minimal suggestive themes.",false),
+    ESRB_TEEN("images/pegis/ESRB_4.PNG","Titles rated T (Teen) have content that may be suitable for ages 13 and older. Titles in this category may contain violence, suggestive themes, crude humor, minimal blood, simulated gambling, and/or infrequent use of strong language. ",false),
+    ESRB_17("images/pegis/ESRB_5.PNG","Titles rated M (Mature) have content that may be suitable for persons ages 17 and older. Titles in this category may contain intense violence, blood and gore, sexual content and/or strong language.",false),
+    ESRB_ADULTS("images/pegis/ESRB_6.PNG","Titles rated AO (Adults Only) have content that should only be played by persons 18 years and older. Titles in this category may include prolonged scenes of intense violence and/or graphic sexual content and nudity.",false),
+    ESRB_PENDING("images/pegis/ESRB_7.PNG","Titles listed as RP (Rating Pending) have been submitted to the ESRB and are awaiting final rating. (This symbol appears only in advertising prior to a game's release.)",false);
 
     private String urlPictogram;
     private String altText;
@@ -44,5 +38,22 @@ public enum Pegi {
 
     public boolean isDescriptor() {
         return this.isDescriptor;
+    }
+
+    public static Pegi getPegiByName(String pegi){
+        if(pegi.equalsIgnoreCase("Early Childhood"))
+            return ESRB_CHILDHOOD;
+        else if(pegi.equalsIgnoreCase("Everyone"))
+            return ESRB_EVERYONE;
+        else if(pegi.equalsIgnoreCase("Everyone 10+"))
+            return ESRB_10;
+        else if(pegi.equalsIgnoreCase("Teen"))
+            return ESRB_TEEN;
+        else if(pegi.equalsIgnoreCase("Mature"))
+            return ESRB_17;
+        else if(pegi.equalsIgnoreCase("Adults Only"))
+            return ESRB_ADULTS;
+        else
+            return ESRB_PENDING;
     }
 }
