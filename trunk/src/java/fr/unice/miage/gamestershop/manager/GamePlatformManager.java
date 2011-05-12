@@ -37,4 +37,12 @@ public class GamePlatformManager {
         Query q = em.createQuery("SELECT p FROM GamePlatform p");
         return q.getResultList();
     }
+
+    public GamePlatform getPlatformByName(String name){
+        Query q = em.createQuery("SELECT p FROM GamePlatform p WHERE p.name LIKE :name");
+        q.setParameter("name", name);
+        return (GamePlatform)q.getSingleResult();
+    }
+
+    
 }
