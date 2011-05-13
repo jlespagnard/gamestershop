@@ -44,6 +44,10 @@ public class DispatchActionHeader extends HttpServlet {
             else if(actionHeader.equals("basket")) {
                 forwardTo = "GetBasketContent";
             }
+            else if(actionHeader.equals("disconnect")) {
+                request.getSession().invalidate();
+                forwardTo = "Loader";
+            }
         }
         
         request.getRequestDispatcher(forwardTo).forward(request, response);

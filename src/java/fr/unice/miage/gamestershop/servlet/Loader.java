@@ -47,14 +47,14 @@ public class Loader extends HttpServlet {
     @EJB
     private GameGenderManager genderManager;
     @EJB
-    private GuestManager guestMManager;
+    private GuestManager guestManager;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        Guest guest = new Guest("toto@titi.fr", "1234", "toto", "titi", null, new Address(21, "Jump Street", "#App 69", "56437", "New-York", "Les Stazunis", false), null);
-        guestMManager.save(guest);
+        Guest guest = new Guest("admin@admin.fr", "admin", "Super", "Utilisateur", null, new Address(1, "Nowhere Street", "Nothing", "12345", "Somwhere", "Anywhere", false), null);
+        guestManager.save(guest);
         
         GamePlatform platform = new GamePlatform("Nintendo DS");
         platformManager.save(platform);

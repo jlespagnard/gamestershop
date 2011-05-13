@@ -25,7 +25,7 @@ public class Guest implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @Column(nullable=false)
+    @Column(nullable=false, unique=true)
     private String email;
     @Column(nullable=false)
     private String password;

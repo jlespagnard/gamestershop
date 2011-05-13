@@ -7,19 +7,25 @@ package fr.unice.miage.gamestershop.servlet;
 import fr.unice.miage.gamestershop.entity.Guest;
 import fr.unice.miage.gamestershop.manager.GuestManager;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * @author Julien LESPAGNARD
  * @author Anthony BONIN
  */
-@WebServlet(name = "ConnectGuest", urlPatterns = {"/ConnectGuest"})
-public class ConnectGuest extends HttpServlet {
+@WebServlet(name = "GetListGuests", urlPatterns = {"/GetListGuests"})
+public class GetListGuests extends HttpServlet {
 
     @EJB
     private GuestManager guestManager;
@@ -33,24 +39,14 @@ public class ConnectGuest extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Guest guest = null;
+        int firstResult = (request.getParameter("firstResult") == null) ? 0 : Integer.parseInt(request.getParameter("firstResult"));
         
-        try {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-
-            if(email != null && password != null) {
-                guest = guestManager.getGuestByEmailAndPassword(email, password);
-                if(guest != null && guest.getId() > 0) {
-                    request.getSession().setAttribute("guest", guest);
-                }
-            }
-        }
-        catch(Exception e) {
-            System.out.println(e);
-        }
+        Collection<Guest> guests = guestManager.getAllGuests(firstResult, 10);
         
-        response.getWriter().print((guest != null && guest.getId() > 0));
+        Map<String,Object> retour = new LinkedHashMap<String, Object>();
+        retour.put("nbTotalGuests", guestManager.countGuests());
+        retour.put("guests", guests);
+        response.getWriter().print(new JSONObject(retour));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

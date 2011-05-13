@@ -48,12 +48,6 @@ public class AddToBasket extends HttpServlet {
         items.add(line);
         session.setAttribute("basket", items);
 
-        game.setRemainingQuantity(game.getRemainingQuantity()-1);
-        if(game.getRemainingQuantity() == 0) {
-            game.setIsAvailable(false);
-        }
-        game = gameManager.save(game);
-
         JSONObject jsonObj = new JSONObject(game);
         response.getWriter().print(jsonObj);
     }

@@ -36,7 +36,6 @@ public class UpdateGuestProfil extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("TU PASSES TE KASSES !");
         HttpSession session = request.getSession();
         Guest guest = (Guest)session.getAttribute("guest");
         

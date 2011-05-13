@@ -38,6 +38,18 @@ public class GuestManager {
         return q.getResultList();
     }
     
+    public Collection<Guest> getAllGuests(int firstResult, int maxResults) {
+        Query q = em.createQuery("SELECT g FROM Guest g");
+        q.setFirstResult(firstResult);
+        q.setMaxResults(maxResults);
+        return q.getResultList();
+    }
+    
+    public long countGuests() {
+        Query q = em.createQuery("SELECT COUNT(DISTINCT g.id) FROM Guest g");
+        return (Long)q.getSingleResult();
+    }
+    
     public Guest getGuestByEmailAndPassword(String email, String password) {
         Query q = em.createQuery("SELECT g FROM Guest g WHERE g.email = :email AND g.password = :password");
         q.setParameter("email", email);
