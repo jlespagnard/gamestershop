@@ -26,7 +26,7 @@ body {
 
 .footer {
     text-align: center;
-    font-size: smaller;
+    font-size: x-small;
 }
 
 #page { width: 100%; margin: auto; }
@@ -35,3 +35,25 @@ body {
 #thumbs img { float: left; }
 #description { background: black; color: white; position: absolute; bottom: 0; padding: 10px 20px; width: auto; margin: 5px; font-size: x-small; }
 #panel { position: relative; }
+
+.titleTable {
+    background-color: black;
+    color: white;
+    text-align: center;
+}
+
+.dataTable {
+    background-color: gainsboro;
+    font-size: smaller;
+    vertical-align: top;
+    padding: 0;
+    margin: 0;
+}
+
+.dataTableLight {
+    background-color: lavender;
+    font-size: smaller;
+    vertical-align: top;
+    padding: 0;
+    margin: 0;
+}
