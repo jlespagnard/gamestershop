@@ -5,6 +5,7 @@
 package fr.unice.miage.gamestershop.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author Julien LESPAGNARD
  * @author Anthony BONIN
  */
-@WebServlet(name = "DispatchActionHeader", urlPatterns = {"/DispatchActionHeader"})
-public class DispatchActionHeader extends HttpServlet {
+@WebServlet(name = "DisconnectGuest", urlPatterns = {"/DisconnectGuest"})
+public class DisconnectGuest extends HttpServlet {
 
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -27,25 +28,8 @@ public class DispatchActionHeader extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String actionHeader = request.getParameter("actionHeader");
-        String forwardTo = "home.jsp";
-        
-        if(actionHeader != null) {
-            if(actionHeader.equals("adminPanel")) {
-                forwardTo = "admin.jsp";
-            }
-            else if (actionHeader.equals("profilPanel")) {
-                forwardTo = "profil.jsp";
-            }
-            else if (actionHeader.equals("home")) {
-                forwardTo = "home.jsp";
-            }
-            else if(actionHeader.equals("basket")) {
-                forwardTo = "GetBasketContent";
-            }
-        }
-        
-        request.getRequestDispatcher(forwardTo).forward(request, response);
+        request.getSession().invalidate();
+        request.getRequestDispatcher("Loader").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

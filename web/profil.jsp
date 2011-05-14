@@ -31,18 +31,26 @@
                 </tr>
             </table>
             <span>Contact informations</span>
+            <c:set var="phone" value="" />
+            <c:set var="cellular" value="" />
+            <c:set var="fax" value="" />
+            <c:if test="${g.contact != null}">
+                <c:set var="phone" value="${g.contact.phone}" />
+                <c:set var="cellular" value="${g.contact.cellular}" />
+                <c:set var="fax" value="${g.contact.fax}" />
+            </c:if>
             <table>
                 <tr>
                     <td>Phone number</td>
-                    <td><input type="text" id="phoneGuest" name="phoneGuest" <c:if test="${g.contact != null}">value="${g.contact.phone}"</c:if> required="true" dojoType="dijit.form.NumberTextBox" /></td>
+                    <td><input type="text" id="phoneGuest" name="phoneGuest" value="${phone}" required="false" dojoType="dijit.form.NumberTextBox" /></td>
                 </tr>
                 <tr>
                     <td>Cellular</td>
-                    <td><input type="text" id="cellularGuest" name="cellularGuest" <c:if test="${g.contact != null}">value="${g.contact.cellular}"</c:if> required="true" dojoType="dijit.form.NumberTextBox" /></td>
+                    <td><input type="text" id="cellularGuest" name="cellularGuest" value="${cellular}" required="false" dojoType="dijit.form.NumberTextBox" /></td>
                 </tr>
                 <tr>
                     <td>Fax number</td>
-                    <td><input type="text" id="faxGuest" name="faxGuest" <c:if test="${g.contact != null}">value="${g.contact.fax}"</c:if> required="true" dojoType="dijit.form.NumberTextBox" /></td>
+                    <td><input type="text" id="faxGuest" name="faxGuest" value="${fax}" required="false" dojoType="dijit.form.NumberTextBox" /></td>
                 </tr>
             </table>
             <span>Billing address</span>
@@ -61,7 +69,7 @@
                 </tr>
                 <tr>
                     <td>Zip code</td>
-                    <td><input type="text" id="addressZipCodeGuest" name="addressZipCodeGuest" value="${g.billingAddress.zipCode}" required="true" dojoType="dijit.form.NumberTextBox" maxlength="5" trim="true" style="width: 5em;" /></td>
+                    <td><input type="text" id="addressZipCodeGuest" name="addressZipCodeGuest" value="${g.billingAddress.zipCode}" required="true" dojoType="dijit.form.TextBox" maxlength="5" trim="true" style="width: 5em;" /></td>
                 </tr>
                 <tr>
                     <td>City</td>
@@ -74,7 +82,14 @@
             </table>
             <table>
                 <tr>
-                    <td colspan="2"><input type="checkbox" id="hasShippingAddress" name="hasShippingAddress" required="false" dojoType="dijit.form.CheckBox" <c:if test="${guest.shippingAddress != null}">checked="checked"</c:if> onclick="addRemoveShippingAddress();" />&nbsp;My shipping address is not my billing address.</td>
+                    <c:choose>
+                        <c:when test="${guest.shippingAddress != null}">
+                            <td colspan="2"><input type="checkbox" id="hasShippingAddress" name="hasShippingAddress" required="false" dojoType="dijit.form.CheckBox" checked="checked" onclick="addRemoveShippingAddress();" />&nbsp;My shipping address is not my billing address.</td>
+                        </c:when>
+                        <c:otherwise>
+                            <td colspan="2"><input type="checkbox" id="hasShippingAddress" name="hasShippingAddress" required="false" dojoType="dijit.form.CheckBox" onclick="addRemoveShippingAddress();" />&nbsp;My shipping address is not my billing address.</td>
+                        </c:otherwise>
+                        </c:choose>
                 </tr>
             </table>
             <div id="divShippingAddress" name="divShippingAddress" <c:choose><c:when test="${guest.shippingAddress == null}">style="visibility: hidden;"</c:when><c:otherwise>style="visibility: visible;"</c:otherwise></c:choose>>
@@ -94,7 +109,7 @@
                     </tr>
                     <tr>
                         <td>Zip code</td>
-                        <td><input type="text" id="shippingAddressZipCodeGuest" name="shippingAddressZipCodeGuest" <c:if test="${guest.shippingAddress != null}">value="${g.shippingAddress.suppInfos}"</c:if> <c:if test="dijit.byId('hasShippingAddress').checked">required="true"</c:if> dojoType="dijit.form.NumberTextBox" maxlength="5" trim="true" style="width: 5em;" /></td>
+                        <td><input type="text" id="shippingAddressZipCodeGuest" name="shippingAddressZipCodeGuest" <c:if test="${guest.shippingAddress != null}">value="${g.shippingAddress.zipCode}"</c:if> <c:if test="dijit.byId('hasShippingAddress').checked">required="true"</c:if> dojoType="dijit.form.TextBox" maxlength="5" trim="true" style="width: 5em;" /></td>
                     </tr>
                     <tr>
                         <td>City</td>

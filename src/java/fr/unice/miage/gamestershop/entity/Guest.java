@@ -33,7 +33,7 @@ public class Guest implements Serializable {
     private String surname;
     @Column(nullable=false)
     private String firstname;
-    @OneToOne
+    @OneToOne(cascade= CascadeType.ALL, optional=true)
     private Contact contact;
     @JoinColumn(nullable=false)
     @OneToOne(cascade= CascadeType.ALL, optional=false)

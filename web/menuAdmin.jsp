@@ -10,7 +10,7 @@
     <div dojoType="dijit.layout.AccordionContainer" style="height: 400px;width: 200px;">
         <div dojoType="dijit.layout.ContentPane" title="Utilisateurs">
             <ul>
-                <li><a href="#" onclick="getListGuests(0);">Liste</a></li>
+                <li><a href="#" onclick="getListGuests(${sessionScope["guest"].id},0);">Liste</a></li>
                 <li>Rechercher</li>
                 <li>Nouvel utilisateur</li>
             </ul>

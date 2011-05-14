@@ -64,13 +64,14 @@ public class SignupGuest extends HttpServlet {
                 contact.setFax(faxGuest);
             }
 
+            Address billingAddress = new Address();
+            guest.setBillingAddress(billingAddress);
             String addressNumberGuest = request.getParameter("billingAddressNumber");
             String addressRoadGuest = request.getParameter("billingAddressRoad");
             String addressInfoSuppGuest = request.getParameter("billingAddressExtraInfos");
             String addressZipCodeGuest = request.getParameter("billingAddressZipCode");
             String addressCityGuest = request.getParameter("billingAddressCity");
             String addressCountrieGuest = request.getParameter("billingAddressCountrie");
-            Address billingAddress = guest.getBillingAddress();
             billingAddress.setNumber(Integer.parseInt(addressNumberGuest));
             billingAddress.setRoad(addressRoadGuest);
             billingAddress.setSuppInfos(addressInfoSuppGuest);
@@ -79,12 +80,9 @@ public class SignupGuest extends HttpServlet {
             billingAddress.setCountrie(addressCountrieGuest);
 
             String hasShippingAddress = request.getParameter("hasShippingAddress");
-            Address shippingAddress = null;
             if(hasShippingAddress != null && hasShippingAddress.equalsIgnoreCase("on")) {
-                shippingAddress = guest.getShippingAddress();
-                if(shippingAddress == null) {
-                    shippingAddress = new Address();
-                }
+                Address shippingAddress = new Address();
+                guest.setShippingAddress(shippingAddress);
                 String shippingAddressNumberGuest = request.getParameter("shippingAddressNumber");
                 String shippingAddressRoadGuest = request.getParameter("shippingAddressRoad");
                 String shippingAddressInfoSuppGuest = request.getParameter("shippingAddressExtraInfos");
@@ -98,7 +96,6 @@ public class SignupGuest extends HttpServlet {
                 shippingAddress.setCity(shippingAddressCityGuest);
                 shippingAddress.setCountrie(shippingAddressCountrieGuest);
             }
-            guest.setShippingAddress(shippingAddress);
 
             guest = guestManager.save(guest);
 
