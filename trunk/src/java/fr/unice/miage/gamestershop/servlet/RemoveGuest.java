@@ -4,7 +4,11 @@
  */
 package fr.unice.miage.gamestershop.servlet;
 
+import fr.unice.miage.gamestershop.entity.Guest;
+import fr.unice.miage.gamestershop.manager.GuestManager;
 import java.io.IOException;
+import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,9 +19,12 @@ import javax.servlet.http.HttpServletResponse;
  * @author Julien LESPAGNARD
  * @author Anthony BONIN
  */
-@WebServlet(name = "DispatchActionHeader", urlPatterns = {"/DispatchActionHeader"})
-public class DispatchActionHeader extends HttpServlet {
+@WebServlet(name = "RemoveGuest", urlPatterns = {"/RemoveGuest"})
+public class RemoveGuest extends HttpServlet {
 
+    @EJB
+    private GuestManager guestManager;
+    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -27,25 +34,18 @@ public class DispatchActionHeader extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String actionHeader = request.getParameter("actionHeader");
-        String forwardTo = "home.jsp";
-        
-        if(actionHeader != null) {
-            if(actionHeader.equals("adminPanel")) {
-                forwardTo = "admin.jsp";
-            }
-            else if (actionHeader.equals("profilPanel")) {
-                forwardTo = "profil.jsp";
-            }
-            else if (actionHeader.equals("home")) {
-                forwardTo = "home.jsp";
-            }
-            else if(actionHeader.equals("basket")) {
-                forwardTo = "GetBasketContent";
-            }
+        boolean success = true;
+        try {
+            int idGuest = Integer.parseInt(request.getParameter("idGuest"));
+            Guest guest = guestManager.getGuestById(idGuest);
+            guestManager.remove(guest);
+        }
+        catch(Exception e) {
+            success = false;
+            System.out.println(e);
         }
         
-        request.getRequestDispatcher(forwardTo).forward(request, response);
+        response.getWriter().print(success);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

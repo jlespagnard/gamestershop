@@ -48,6 +48,15 @@ function addRemoveShippingAddress() {
     }
 }
 
+function addRemoveShippingAddress_sign() {    
+    if(dijit.byId("hasShippingAddress_sign").checked) {
+        $("#divShippingAddress_sign").attr("style", "visibility: visible;");
+    }
+    else {
+        $("#divShippingAddress_sign").attr("style", "visibility: hidden;");
+    }
+}
+
 function showConnectionDialog() {
     dijit.byId('connectionDialog').show();
 }
@@ -60,7 +69,7 @@ function showSignupDialog() {
 function connectGuest() {
     $.post("ConnectGuest", {email:$("#email_conn").val(), password:$("#password_conn").val()}, function(success) {
         if(success) {
-            location.reload();
+            document.location.href="home.jsp";
             dijit.byId('connectionDialog').hide();
         }
         else {
@@ -92,7 +101,7 @@ function signupGuest() {
                             shippingAddressCountrie:$("#shippingAddressCountrie_sign").val()}, 
             function(success) {
                 if(success) {
-                    location.reload();
+                    document.location.href="home.jsp";
                     dijit.byId('signupDialog').hide();
                 }
                 else {
@@ -101,19 +110,20 @@ function signupGuest() {
             },"json");
 }
 
-function getListGuests(firstResult) {
-    $.post("GetListGuests", function(data) {
+function getListGuests(idCurrentGuest,firstResult) {
+    $.post("GetListGuests",{firstResult: firstResult}, function(data) {
         var guests = data.guests;
         var nbTotalGuests = data.nbTotalGuests;
         
         var contentDiv = "";
-        contentDiv += "<table>";
+        contentDiv += "<table style=\"width: 100%;\">";
         contentDiv += "  <tr class=\"titleTable\">";
         contentDiv += "      <td>Firstname</td>";
         contentDiv += "      <td>Surname</td>";
         contentDiv += "      <td>Email</td>";
         contentDiv += "      <td>Contact</td>";
         contentDiv += "      <td>Address</td>";
+        contentDiv += "      <td class=\"transcol\">&nbsp;</td>";
         contentDiv += "  </tr>";
         for(var i in guests) {
             var guest = guests[i];
@@ -148,7 +158,7 @@ function getListGuests(firstResult) {
             contentDiv += "      <td>";
             contentDiv += "          <table>";
             contentDiv += "              <tr>";
-            contentDiv += "                  <td style=\"vertical-align: top;\">Billing Adress</td>";
+            contentDiv += "                  <td style=\"vertical-align: top;\">Billing Address</td>";
             contentDiv += "                  <td>";
             contentDiv += "                      Number : " + guest.billingAddress.number + "<br />";
             contentDiv += "                      Road : " + guest.billingAddress.road + "<br />";
@@ -160,29 +170,31 @@ function getListGuests(firstResult) {
             contentDiv += "              </tr>";
             if(guest.shippingAddress != null) {
                 contentDiv += "              <tr>";
-                contentDiv += "                  <td>Shipping Adress</td>";
+                contentDiv += "                  <td style=\"vertical-align: top;\">Shipping Address</td>";
                 contentDiv += "                  <td>";
-                contentDiv += "                      <table>";
-                contentDiv += "                          <tr>";
-                contentDiv += "                              <td>Number : " + guest.shippingAddress.number + "</td>";
-                contentDiv += "                              <td>Road : " + guest.shippingAddress.road + "</td>";
-                contentDiv += "                              <td>Extra informations : " + guest.shippingAddress.suppInfos + "</td>";
-                contentDiv += "                              <td>Zip code : " + guest.shippingAddress.zipCode + "</td>";
-                contentDiv += "                              <td>City : " + guest.shippingAddress.city + "</td>";
-                contentDiv += "                              <td>Countrie : " + guest.shippingAddress.countrie + "</td>";
-                contentDiv += "                          </tr>";
-                contentDiv += "                      </table>";
+                contentDiv += "                      Number : " + guest.shippingAddress.number + "<br />";
+                contentDiv += "                      Road : " + guest.shippingAddress.road + "<br />";
+                contentDiv += "                      Extra informations : " + guest.shippingAddress.suppInfos + "<br />";
+                contentDiv += "                      Zip code : " + guest.shippingAddress.zipCode + "<br />";
+                contentDiv += "                      City : " + guest.shippingAddress.city + "<br />";
+                contentDiv += "                      Countrie : " + guest.shippingAddress.countrie + "<br />";
                 contentDiv += "                  </td>";
                 contentDiv += "              </tr>";
             }
             contentDiv += "          </table>";
             contentDiv += "      </td>";
+            if(guest.id == idCurrentGuest) {
+                contentDiv += "      <td class=\"transcol\">&nbsp;</td>";
+            }
+            else {
+                contentDiv += "      <td class=\"transcol\"><img src=\"images/remove.png\" onclick=\"removeGuest(" + idCurrentGuest + "," + guest.id + "," + firstResult + ");\" /></td>";
+            }
             contentDiv += "  </tr>";
         }
         contentDiv += " <tr>";
         contentDiv += "     <td colspan=\"5\" style=\"text-align: center;\">";
         if(parseInt(firstResult > 0)) {
-            contentDiv += "         <a href=\"GetListGuests?firstResult=" + firstResult + "\"><img src=\"images/array_previous.png\" /></a>&nbsp;";
+            contentDiv += "         <a href=\"#\" onclick=\"getListGuests(" + idCurrentGuest + "," + firstResult + ")\"><img src=\"images/array_previous.png\" /></a>&nbsp;";
         }
         var firstResultPlusDix = parseInt(firstResult) + 10;
         if(firstResultPlusDix > nbTotalGuests) {
@@ -190,12 +202,23 @@ function getListGuests(firstResult) {
         }
         contentDiv += "         <span>" + firstResult + "&nbsp;&agrave;&nbsp;" + firstResultPlusDix + "&nbsp;sur&nbsp;" + nbTotalGuests + "</span>&nbsp;";
         if(firstResultPlusDix < nbTotalGuests) {
-            contentDiv += "         <a href=\"GetListGuests?firstResult=" + firstResultPlusDix + "\"><img src=\"images/array_next.png\" /></a>";
+            contentDiv += "         <a href=\"#\" onclick=\"getListGuests(" + idCurrentGuest + "," + firstResultPlusDix + ")\"><img src=\"images/array_next.png\" /></a>";
         }
         contentDiv += "     </td>";
         contentDiv += " </tr>";
         contentDiv += "</table>";
         $("#content").html(contentDiv);
-        alert("OK");
+    },"json");
+}
+
+function removeGuest(idCurrentGuest, idGuest, firstResult) {
+    $.post("RemoveGuest",{idGuest: idGuest}, function(data) {
+        if(data) {
+            new dijit.Dialog({title: "Information", content: "Guest has been removed."}).show();
+        }
+        else {
+            new dijit.Dialog({title: "Erreur", content: "A problem occurs during the deletion process.<br />Please, contact Papa Minouche or Mamie Cannette."}).show();
+        }
+        getListGuests(idCurrentGuest, firstResult);
     },"json");
 }

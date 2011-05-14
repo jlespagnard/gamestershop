@@ -22,6 +22,15 @@ body {
     margin: auto;
     padding: 0px;
     font-family: Calibri,sans-serif;
+    background-image: url("../images/stripes.png");
+    background-repeat: repeat;
+}
+
+.mainContainer {
+    width: 100%; 
+    height: 100%;
+    background-image: url("../images/stripes.png");
+    background-repeat: repeat;
 }
 
 .footer {
@@ -56,4 +65,10 @@ body {
     vertical-align: top;
     padding: 0;
     margin: 0;
+}
+
+td.transcol {
+    background-color: white;
+    text-align: center;
+    vertical-align: middle;
 }

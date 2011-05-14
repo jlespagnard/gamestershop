@@ -32,6 +32,10 @@ public class GuestManager {
     public void remove(Guest guest) {
         em.remove(guest);
     }
+    
+    public Guest getGuestById(int idGuest) {
+        return em.find(Guest.class, idGuest);
+    }
 
     public Collection<Guest> getAllGuests() {
         Query q = em.createQuery("SELECT g FROM Guest g");

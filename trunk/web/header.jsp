@@ -43,7 +43,7 @@
         <link rel="stylesheet" href="css/default.css" />        
     </head>
     <body class="nihilo">
-        <div dojoType="dijit.layout.BorderContainer" style="width: 100%; height: 100%">
+        <div dojoType="dijit.layout.BorderContainer" class="mainContainer">
             <div id="headerPane" name="headerPane" dojoType="dijit.layout.ContentPane" region="top" refreshOnShow="true">
                 ${msgHome}<br />
                 <div style="position: relative; float: right;">
@@ -58,17 +58,17 @@
                                 <div dojoType="dijit.Tooltip" connectId="imgSignup">Sign&nbsp;up</div>&nbsp;
                             </c:when>
                             <c:otherwise>
-                                <input type="image" src="images/profil.png" id="imgProfil" onclick="$('#actionHeader').val('profilPanel');" />
+                                <a href="profil.jsp"><img src="images/profil.png" id="imgProfil" /></a>
                                 <div dojoType="dijit.Tooltip" connectId="imgProfil">Profil</div>&nbsp;
-                                <input type="image" src="images/disconnect.png" id="imgDisconnect" onclick="$('#actionHeader').val('disconnect');" />
+                                <a href="DisconnectGuest"><img src="images/disconnect.png" id="imgDisconnect" /></a>
                                 <div dojoType="dijit.Tooltip" connectId="imgDisconnect">Disconnect</div>&nbsp;
                                 <c:if test="${sessionScope['guest'].email == 'admin@admin.fr'}">
-                                    <input type="image" src="images/admin.png" id="imgAdmin" onclick="$('#actionHeader').val('adminPanel');" />
+                                    <a href="admin.jsp"><img src="images/admin.png" id="imgAdmin" /></a>
                                     <div dojoType="dijit.Tooltip" connectId="imgAdmin">Admin&nbsp;Console</div>&nbsp;
                                 </c:if>
                             </c:otherwise>
                         </c:choose>
-                        <input type="image" src="images/caddie.png" id="imgBasket" onclick="$('#actionHeader').val('basket');" />
+                        <a href="basket.jsp"><img src="images/caddie.png" id="imgBasket" /></a>
                         <div dojoType="dijit.Tooltip" connectId="imgBasket">Basket</div>
                         <input type="hidden" id="actionHeader" name="actionHeader" value="" />
                     </form>
@@ -91,7 +91,7 @@
                     </table>
                 </div>
             </div>
-            <div dojoType="dijit.Dialog" id="signupDialog" jsId="signupDialog" title="Sign up" style="height: auto;">
+            <div dojoType="dijit.Dialog" id="signupDialog" jsId="signupDialog" title="Sign up" style="height: 90%;overflow: auto;">
                 <div dojoType="dijit.form.Form" id="signupForm" jsId="signupForm" encType="multipart/form-data" action="" method="">
                     <table>
                         <tr>
@@ -142,7 +142,7 @@
                         </tr>
                         <tr>
                             <td>Zip code</td>
-                            <td><input type="text" id="billingAddressZipCode_sign" name="billingAddressZipCode_sign" required="true" trim="true" maxlength="5" style="width: 5em;" dojoType="dijit.form.NumberTextBox" /></td>
+                            <td><input type="text" id="billingAddressZipCode_sign" name="billingAddressZipCode_sign" required="true" trim="true" maxlength="5" style="width: 5em;" dojoType="dijit.form.TextBox" /></td>
                         </tr>
                         <tr>
                             <td>City</td>
@@ -155,10 +155,10 @@
                     </table>
                     <table>
                         <tr>
-                            <td colspan="2"><input type="checkbox" id="hasShippingAddress_sign" name="hasShippingAddress_sign" required="false" dojoType="dijit.form.CheckBox" onclick="addRemoveShippingAddress();" />&nbsp;My shipping address is not my billing address.</td>
+                            <td colspan="2"><input type="checkbox" id="hasShippingAddress_sign" name="hasShippingAddress_sign" required="false" dojoType="dijit.form.CheckBox" onclick="addRemoveShippingAddress_sign();" />&nbsp;My shipping address is not my billing address.</td>
                         </tr>
                     </table>
-                    <div id="divShippingAddress" name="divShippingAddress" style="visibility: hidden;">
+                    <div id="divShippingAddress_sign" name="divShippingAddress_sign" style="visibility: hidden;">
                         <table>
                             <tr>
                                 <td colspan="2" style="font-weight: bold;">Shipping address</td>
@@ -177,7 +177,7 @@
                             </tr>
                             <tr>
                                 <td>Zip code</td>
-                                <td><input type="text" id="shippingAddressZipCode_sign" name="shippingAddressZipCode_sign" required="true" trim="true" maxlength="5" style="width: 5em;" dojoType="dijit.form.NumberTextBox" /></td>
+                                <td><input type="text" id="shippingAddressZipCode_sign" name="shippingAddressZipCode_sign" required="true" trim="true" maxlength="5" style="width: 5em;" dojoType="dijit.form.TextBox" /></td>
                             </tr>
                             <tr>
                                 <td>City</td>
