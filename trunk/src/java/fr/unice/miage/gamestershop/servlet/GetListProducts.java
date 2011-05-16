@@ -4,8 +4,14 @@
  */
 package fr.unice.miage.gamestershop.servlet;
 
-import fr.unice.miage.gamestershop.manager.GuestManager;
+import com.amazonaws.util.json.JSONObject;
+import fr.unice.miage.gamestershop.entity.Game;
+import fr.unice.miage.gamestershop.manager.GameManager;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,11 +23,11 @@ import javax.servlet.http.HttpServletResponse;
  * @author Julien LESPAGNARD
  * @author Anthony BONIN
  */
-@WebServlet(name = "RemoveGuest", urlPatterns = {"/RemoveGuest"})
-public class RemoveGuest extends HttpServlet {
+@WebServlet(name = "GetListProducts", urlPatterns = {"/GetListProducts"})
+public class GetListProducts extends HttpServlet {
 
     @EJB
-    private GuestManager guestManager;
+    private GameManager gameManager;
     
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -32,17 +38,14 @@ public class RemoveGuest extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        boolean success = true;
-        try {
-            int idGuest = Integer.parseInt(request.getParameter("idGuest"));
-            guestManager.remove(idGuest);
-        }
-        catch(Exception e) {
-            success = false;
-            System.out.println(e);
-        }
+        int firstResult = (request.getParameter("firstResult") == null) ? 0 : Integer.parseInt(request.getParameter("firstResult"));
         
-        response.getWriter().print(success);
+        Collection<Game> games = gameManager.getAllGames(firstResult, 10);
+        
+        Map<String,Object> retour = new LinkedHashMap<String, Object>();
+        retour.put("nbTotalProducts", gameManager.countGames());
+        retour.put("products", games);
+        response.getWriter().print(new JSONObject(retour));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

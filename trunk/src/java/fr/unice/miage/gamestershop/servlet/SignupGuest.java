@@ -9,7 +9,6 @@ import fr.unice.miage.gamestershop.entity.Contact;
 import fr.unice.miage.gamestershop.entity.Guest;
 import fr.unice.miage.gamestershop.manager.GuestManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -59,9 +58,15 @@ public class SignupGuest extends HttpServlet {
                     contact = new Contact();
                     guest.setContact(contact);
                 }
-                contact.setPhone(phoneGuest);
-                contact.setCellular(cellularGuest);
-                contact.setFax(faxGuest);
+                if(phoneGuest != null) {
+                    contact.setPhone(phoneGuest.trim());
+                }
+                if(cellularGuest != null) {
+                    contact.setCellular(cellularGuest.trim());
+                }
+                if(faxGuest != null) {
+                    contact.setFax(faxGuest.trim());
+                }
             }
 
             Address billingAddress = new Address();
@@ -72,10 +77,10 @@ public class SignupGuest extends HttpServlet {
             String addressZipCodeGuest = request.getParameter("billingAddressZipCode");
             String addressCityGuest = request.getParameter("billingAddressCity");
             String addressCountrieGuest = request.getParameter("billingAddressCountrie");
-            billingAddress.setNumber(Integer.parseInt(addressNumberGuest));
+            billingAddress.setNumber(Integer.parseInt(addressNumberGuest.trim()));
             billingAddress.setRoad(addressRoadGuest);
             billingAddress.setSuppInfos(addressInfoSuppGuest);
-            billingAddress.setZipCode(addressZipCodeGuest);
+            billingAddress.setZipCode(addressZipCodeGuest.trim());
             billingAddress.setCity(addressCityGuest);
             billingAddress.setCountrie(addressCountrieGuest);
 
@@ -89,17 +94,18 @@ public class SignupGuest extends HttpServlet {
                 String shippingAddressZipCodeGuest = request.getParameter("shippingAddressZipCode");
                 String shippingAddressCityGuest = request.getParameter("shippingAddressCity");
                 String shippingAddressCountrieGuest = request.getParameter("shippingAddressCountrie");
-                shippingAddress.setNumber(Integer.parseInt(shippingAddressNumberGuest));
+                shippingAddress.setNumber(Integer.parseInt(shippingAddressNumberGuest.trim()));
                 shippingAddress.setRoad(shippingAddressRoadGuest);
                 shippingAddress.setSuppInfos(shippingAddressInfoSuppGuest);
-                shippingAddress.setZipCode(shippingAddressZipCodeGuest);
+                shippingAddress.setZipCode(shippingAddressZipCodeGuest.trim());
                 shippingAddress.setCity(shippingAddressCityGuest);
                 shippingAddress.setCountrie(shippingAddressCountrieGuest);
             }
 
             guest = guestManager.save(guest);
 
-            if(guest.getId() > 0) {
+            Guest guestSession = (Guest)request.getSession().getAttribute("guest");
+            if(guestSession == null && guest.getId() > 0) {
                 request.getSession().setAttribute("guest", guest);
             }
         }

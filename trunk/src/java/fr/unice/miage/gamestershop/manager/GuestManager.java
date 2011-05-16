@@ -29,8 +29,8 @@ public class GuestManager {
         return guest;
     }
 
-    public void remove(Guest guest) {
-        em.remove(guest);
+    public void remove(int idGuest) {
+        em.remove(em.find(Guest.class, idGuest));
     }
     
     public Guest getGuestById(int idGuest) {

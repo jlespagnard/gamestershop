@@ -12,19 +12,19 @@
             <ul>
                 <li><a href="#" onclick="getListGuests(${sessionScope["guest"].id},0);">Liste</a></li>
                 <li>Rechercher</li>
-                <li>Nouvel utilisateur</li>
+                <li><a href="#" onclick="showSignupDialog(${sessionScope["guest"].id});">Nouvel utilisateur</a></li>
             </ul>
         </div>
         <div dojoType="dijit.layout.ContentPane" title="Produits">
             <ul>
-                <li>Liste</li>
+                <li><a href="#" onclick="getListProducts(0);">Liste</a></li>
                 <li>Rechercher</li>
                 <li>Ajouter un produit</li>
             </ul>
         </div>
         <div dojoType="dijit.layout.ContentPane" title="Commandes" selected="true">
             <ul>
-                <li>Liste</li>
+                <li><a href="#" onclick="getListOrders(0);">Liste</a></li>
                 <li>Rechercher</li>
             </ul>
         </div>

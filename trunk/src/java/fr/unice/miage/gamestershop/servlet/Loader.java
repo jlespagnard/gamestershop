@@ -11,7 +11,6 @@ import fr.unice.miage.gamestershop.entity.GameGender;
 import fr.unice.miage.gamestershop.entity.GamePlatform;
 import fr.unice.miage.gamestershop.entity.Guest;
 import fr.unice.miage.gamestershop.entity.LineItem;
-import fr.unice.miage.gamestershop.enumeration.Pegi;
 import fr.unice.miage.gamestershop.manager.GameGenderManager;
 import fr.unice.miage.gamestershop.manager.GameManager;
 import fr.unice.miage.gamestershop.manager.GamePlatformManager;
@@ -19,9 +18,6 @@ import fr.unice.miage.gamestershop.manager.GuestManager;
 import fr.unice.miage.gamestershop.utils.GameParser;
 import fr.unice.miage.gamestershop.utils.GuestParser;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -43,7 +39,7 @@ import javax.servlet.http.HttpSession;
             urlPatterns={"/Loader"},
             initParams = {
     //IMPORTANT: METTRE ICI LE CHEMIN OU SE TROUVE LA RACINE DE VOTRE PROJET
-                @WebInitParam(name="ressourceDir", value="C:\\Users\\Mousztomania\\Documents\\Workspace\\gamestershop")
+                @WebInitParam(name="ressourceDir", value="D:\\Projets\\Miage\\M1\\NetBeans\\gamestershop")
             }
 )
 public class Loader extends HttpServlet {

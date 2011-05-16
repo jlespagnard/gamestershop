@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
@@ -25,9 +24,9 @@ public class LineItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @JoinColumn(nullable=false)
-    @ManyToOne
+    @ManyToOne(optional=false)
     private Game game;
+    @Column(nullable=false)
     private int quantity;
     @Column(nullable=false)
     private BigDecimal subTotal;

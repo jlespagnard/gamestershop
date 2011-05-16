@@ -4,24 +4,35 @@
  */
 package fr.unice.miage.gamestershop.servlet;
 
-import fr.unice.miage.gamestershop.manager.GuestManager;
+import fr.unice.miage.gamestershop.entity.Guest;
+import fr.unice.miage.gamestershop.entity.LineItem;
+import fr.unice.miage.gamestershop.manager.PurchaseOrderManager;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.LinkedList;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  * @author Julien LESPAGNARD
  * @author Anthony BONIN
  */
-@WebServlet(name = "RemoveGuest", urlPatterns = {"/RemoveGuest"})
-public class RemoveGuest extends HttpServlet {
+@WebServlet(name = "PurchaseOrder", urlPatterns = {"/PurchaseOrder"})
+public class PurchaseOrder extends HttpServlet {
 
     @EJB
-    private GuestManager guestManager;
+    private PurchaseOrderManager orderManager;
     
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,16 +44,47 @@ public class RemoveGuest extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         boolean success = true;
+        
         try {
-            int idGuest = Integer.parseInt(request.getParameter("idGuest"));
-            guestManager.remove(idGuest);
+            HttpSession session = request.getSession();
+            
+            LinkedList<LineItem> items = (LinkedList<LineItem>)session.getAttribute("basket");
+            Guest guest = (Guest)session.getAttribute("guest");
+            
+            String itemsQuantities = request.getParameter("itemsQuantities");
+            JSONObject itemsQuantitiesJson = new JSONObject(new JSONTokener(itemsQuantities));
+            Iterator<String> idGames = itemsQuantitiesJson.keys();
+            int idGame = 0;
+            int quantity = 0;
+            BigDecimal totalPrice = BigDecimal.ZERO;
+            while(idGames.hasNext()) {
+                idGame = Integer.parseInt(idGames.next());
+                quantity = itemsQuantitiesJson.getInt(String.valueOf(idGame));
+                
+                for(LineItem item : items) {
+                    if(item.getGame().getId() == idGame) {
+                        item.setQuantity(quantity);
+                        item.setSubTotal(item.getGame().getPrice().multiply(new BigDecimal(quantity)));
+                        totalPrice = totalPrice.add(item.getSubTotal());
+                        break;
+                    }
+                }
+            }
+            
+            fr.unice.miage.gamestershop.entity.PurchaseOrder order = new fr.unice.miage.gamestershop.entity.PurchaseOrder(guest, new Timestamp(Calendar.getInstance().getTimeInMillis()), totalPrice);
+            order.setItems(items);
+            
+            order = orderManager.save(order);
+            if(order == null || order.getId() <= 0) {
+                success = false;
+            }
         }
         catch(Exception e) {
-            success = false;
             System.out.println(e);
+            success = false;
         }
         
-        response.getWriter().print(success);
+        response.getWriter().println(success);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
