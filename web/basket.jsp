@@ -16,7 +16,7 @@
                 <span>Votre panier est vide.</span>
             </c:when>
             <c:otherwise>
-                <form action="PurchaseOrder" method="POST">
+                <div dojoType="dijit.form.Form" id="signupForm" jsId="signupForm" encType="multipart/form-data" action="" method="">
                     <table border="1">
                         <tr>
                             <td colspan="3">Contenu de votre panier</td>
@@ -35,8 +35,8 @@
                             <td><span class="totalPrice" id="totalPrice">${totalPrice}</span>&nbsp;&euro;</td>
                         </tr>
                     </table>
-                    <button type="submit" dojoType="dijit.form.Button" name="purchaseButton">Commander</button>
-                </form>
+                    <button dojoType="dijit.form.Button" name="purchaseButton" style="float: right;position: relative;" onclick="purchaseOrder(${sessionScope['guest'].id})">Commander</button>
+                </div>
             </c:otherwise>
         </c:choose>
     </div>

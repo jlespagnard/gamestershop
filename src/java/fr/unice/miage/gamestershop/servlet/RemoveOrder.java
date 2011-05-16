@@ -4,8 +4,9 @@
  */
 package fr.unice.miage.gamestershop.servlet;
 
-import fr.unice.miage.gamestershop.manager.GuestManager;
+import fr.unice.miage.gamestershop.manager.PurchaseOrderManager;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,11 +18,11 @@ import javax.servlet.http.HttpServletResponse;
  * @author Julien LESPAGNARD
  * @author Anthony BONIN
  */
-@WebServlet(name = "RemoveGuest", urlPatterns = {"/RemoveGuest"})
-public class RemoveGuest extends HttpServlet {
+@WebServlet(name = "RemoveOrder", urlPatterns = {"/RemoveOrder"})
+public class RemoveOrder extends HttpServlet {
 
     @EJB
-    private GuestManager guestManager;
+    private PurchaseOrderManager orderManager;
     
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,8 +35,8 @@ public class RemoveGuest extends HttpServlet {
             throws ServletException, IOException {
         boolean success = true;
         try {
-            int idGuest = Integer.parseInt(request.getParameter("idGuest"));
-            guestManager.remove(idGuest);
+            int idOrder = Integer.parseInt(request.getParameter("idOrder"));
+            orderManager.remove(idOrder);
         }
         catch(Exception e) {
             success = false;

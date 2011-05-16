@@ -34,8 +34,8 @@ public class GameManager {
         return game;
     }
 
-    public void remove(Game game) {
-        em.remove(game);
+    public void remove(int idGame) {
+        em.remove(em.find(Game.class, idGame));
     }
 
     private String getWhereClause(String[] names, String[] developers, String[] publishers, Date releaseMin, Date releaseMax, BigDecimal priceMin, BigDecimal priceMax, String[] genderNames, String[] platformNames) {
@@ -180,6 +180,18 @@ public class GameManager {
         return Integer.parseInt((String)q.getSingleResult());
     }
 
+    public Collection<Game> getAllGames(int firstResult, int maxResults) {
+        Query q = em.createQuery("SELECT g FROM Game g");
+        q.setFirstResult(firstResult);
+        q.setMaxResults(maxResults);
+        return q.getResultList();
+    }
+    
+    public long countGames() {
+        Query q = em.createQuery("SELECT COUNT(DISTINCT g.id) FROM Game g");
+        return (Long)q.getSingleResult();
+    }
+    
     public Collection<String> getAllDevelopers() {
         Query q = em.createQuery("SELECT DISTINCT(g.developer) FROM Game g");
         return q.getResultList();

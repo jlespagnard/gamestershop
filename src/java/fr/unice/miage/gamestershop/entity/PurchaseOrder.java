@@ -10,8 +10,10 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.LinkedList;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,15 +31,13 @@ public class PurchaseOrder implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @JoinColumn(nullable=false)
-    @ManyToOne
+    @ManyToOne(optional=false)
     private Guest guest;
     @Column(nullable=false)
     private Timestamp orderDate;
     @Column(nullable=false)
     private BigDecimal totalBasePrice;
-    @JoinColumn(nullable=false)
-    @OneToMany
+    @OneToMany(cascade= CascadeType.ALL,fetch= FetchType.LAZY)
     private Collection<LineItem> items;
 
     public PurchaseOrder() {
@@ -87,6 +87,10 @@ public class PurchaseOrder implements Serializable {
 
     public void setItems(Collection<LineItem> items) {
         this.items = items;
+    }
+    
+    public int getNbItems() {
+        return (this.items == null) ? 0 : this.items.size();
     }
 
     public void addItem(LineItem item) {

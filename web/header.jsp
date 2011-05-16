@@ -54,7 +54,7 @@
                             <c:when test="${sessionScope['guest'] == null}">
                                 <img src="images/login.png" id="imgLogin" onclick="showConnectionDialog();" />
                                 <div dojoType="dijit.Tooltip" connectId="imgLogin">Login</div>&nbsp;
-                                <img src="images/signup.png" id="imgSignup" onclick="showSignupDialog();" />
+                                <img src="images/signup.png" id="imgSignup" onclick="showSignupDialog(-1);" />
                                 <div dojoType="dijit.Tooltip" connectId="imgSignup">Sign&nbsp;up</div>&nbsp;
                             </c:when>
                             <c:otherwise>
@@ -115,15 +115,15 @@
                         </tr>
                         <tr>
                             <td>Phone number</td>
-                            <td><input type="text" id="phone_sign" name="phone_sign" required="false" trim="true" dojoType="dijit.form.NumberTextBox" /></td>
+                            <td><input type="text" id="phone_sign" name="phone_sign" required="false" trim="true" dojoType="dijit.form.TextBox" /></td>
                         </tr>
                         <tr>
                             <td>Cellular</td>
-                            <td><input type="text" id="cellular_sign" name="cellular_sign" required="false" trim="true" dojoType="dijit.form.NumberTextBox" /></td>
+                            <td><input type="text" id="cellular_sign" name="cellular_sign" required="false" trim="true" dojoType="dijit.form.TextBox" /></td>
                         </tr>
                         <tr>
                             <td>Fax number</td>
-                            <td><input type="text" id="fax_sign" name="fax_sign" required="false" trim="true" dojoType="dijit.form.NumberTextBox" /></td>
+                            <td><input type="text" id="fax_sign" name="fax_sign" required="false" trim="true" dojoType="dijit.form.TextBox" /></td>
                         </tr>
                         <tr>
                             <td colspan="2" style="font-weight: bold;">Billing address</td>
@@ -189,6 +189,6 @@
                             </tr>
                         </table>
                     </div>
-                    <button dojoType="dijit.form.Button" name="signupGuestButton" style="float: right;position: relative;" onclick="signupGuest()">Sign up</button>
+                    <button dojoType="dijit.form.Button" name="signupGuestButton" style="float: right;position: relative;" onclick="signupGuest(${sessionScope['guest'].id})">Sign up</button>
                 </div>
             </div>
