@@ -17,6 +17,7 @@ import fr.unice.miage.gamestershop.manager.GameManager;
 import fr.unice.miage.gamestershop.manager.GamePlatformManager;
 import fr.unice.miage.gamestershop.manager.GuestManager;
 import fr.unice.miage.gamestershop.utils.GameParser;
+import fr.unice.miage.gamestershop.utils.GuestParser;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -27,6 +28,7 @@ import java.util.LinkedList;
 import javax.ejb.EJB;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +39,13 @@ import javax.servlet.http.HttpSession;
  * @author Julien LESPAGNARD
  * @author Anthony BONIN
  */
-@WebServlet(name="Loader", urlPatterns={"/Loader"})
+@WebServlet(name="Loader",
+            urlPatterns={"/Loader"},
+            initParams = {
+    //IMPORTANT: METTRE ICI LE CHEMIN OU SE TROUVE LA RACINE DE VOTRE PROJET
+                @WebInitParam(name="ressourceDir", value="C:\\Users\\Mousztomania\\Documents\\Workspace\\gamestershop")
+            }
+)
 public class Loader extends HttpServlet {
 
     @EJB
@@ -53,9 +61,18 @@ public class Loader extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
+
+        //Ajout d'utilisateurs, un super admin ainsi que quelques utilisateurs générés dans un fichier xml
         Guest guest = new Guest("admin@admin.fr", "admin", "Super", "Utilisateur", null, new Address(1, "Nowhere Street", "Nothing", "12345", "Somwhere", "Anywhere", false), null);
         guestManager.save(guest);
-        
+        GuestParser gp = new GuestParser(config.getInitParameter("ressourceDir"));
+        Iterator<Guest> guestIterator = gp.listeUtilisateurs.iterator();
+        while(guestIterator.hasNext()){
+            guestManager.save(guestIterator.next());
+        }
+
+
+        //Ajout des plate formes, à la main car la liste est "fixe"
         GamePlatform platform = new GamePlatform("Nintendo DS");
         platformManager.save(platform);
         platform = new GamePlatform("Nintendo 3DS");
@@ -72,7 +89,7 @@ public class Loader extends HttpServlet {
         platformManager.save(platform);
         platform = new GamePlatform("PlayStation 2");
         platformManager.save(platform);
-        platform = new GamePlatform("Autre");
+        platform = new GamePlatform("Consoles et accessoires");
         platformManager.save(platform);
         
         GameGender gender = new GameGender("Action");
@@ -117,13 +134,16 @@ public class Loader extends HttpServlet {
         genderManager.save(gender);
         gender = new GameGender("Word Games");
         genderManager.save(gender);
-        
+
+
+        //Ajout des jeux à partir de la base de données d'Amazon
         GameParser parser = new GameParser(platformManager.getAllPlatforms(), genderManager.getAllGenders());
         Iterator<Game> listeJeux = parser.listeJeux.iterator();
         while(listeJeux.hasNext()){
-        System.out.println("PASSAGE 2");
             gameManager.save(listeJeux.next());
         }
+
+
     }
    
     /** 

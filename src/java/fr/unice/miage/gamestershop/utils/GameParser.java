@@ -24,8 +24,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *
- * @author Julien Lespagnard & Anthony Bonin
+ * @author Julien LESPAGNARD
+ * @author Anthony BONIN
  */
 
 public class GameParser {
@@ -84,7 +84,6 @@ public class GameParser {
         /*
          * Here is an example in map form, where the request parameters are stored in a map.
          */
-        System.out.println("Map form example:");
         Map<String, String> params = new HashMap<String, String>();
         params.put("Service", "AWSECommerceService");
         params.put("Operation", "ItemSearch");
@@ -144,16 +143,15 @@ public class GameParser {
 
                 GamePlatform platform = null;
                 GamePlatform tmp = null;
-                String nomPlatform = (jeu.getElementsByTagName("Platform").getLength()>0?jeu.getElementsByTagName("Platform").item(0).getTextContent():"Autre");
+                String nomPlatform = (jeu.getElementsByTagName("Platform").getLength()>0?jeu.getElementsByTagName("Platform").item(0).getTextContent():"Consoles et accessoires");
                 if(nomPlatform.contains("Windows")){
                     nomPlatform="PC";
                 }
-                System.out.println(nomPlatform);
                 Iterator<GamePlatform> it = listePlatforms.iterator();
                 boolean platformExist = false;
                 while(it.hasNext()){
                     GamePlatform plat = it.next();
-                    if(plat.getName().equalsIgnoreCase("Autre"))
+                    if(plat.getName().equalsIgnoreCase("Consoles et accessoires"))
                         tmp=plat;
                     if(plat.getName().equals(nomPlatform)){
                         platformExist = true;
