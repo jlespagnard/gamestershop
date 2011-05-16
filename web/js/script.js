@@ -310,9 +310,13 @@ function purchaseOrder(idCurrentGuest) {
         itemsQuantities += "}";
         alert(itemsQuantities);
         $.post("PurchaseOrder", {itemsQuantities:itemsQuantities}, function(data) {
-            if(data) {
-                new dijit.Dialog({title: "Information", content: "Guest has been removed."}).show();
+            if(data == 0) {
+                var dialog = new dijit.Dialog({title: "Information", content: "Your order has been placed."});
+                dialog.show();
                 document.location.href="home.jsp";
+            }
+            else if(data == 1) {
+                new dijit.Dialog({title: "Erreur", content: "Insuffisance r&eacute;nale.... euhhh no, insuffisance stock (sorry) : please review your order."}).show();
             }
             else {
                 new dijit.Dialog({title: "Erreur", content: "A problem occurs during the order process.<br />Please, contact Papa Minouche or Mamie Cannette."}).show();
@@ -397,18 +401,6 @@ function showItemsDialog(index) {
     profil += " <table>";
     for(var i in items) {
         var item = items[i];
-        profil += "     <tr>";
-        profil += "         <td><img alt=\"Cover\" src=\"" + item.game.urlCover + "\" width=\"100px\" height=\"130px\" /></td>";
-        profil += "         <td style=\"vertical-align: top;\">";
-        profil += "             Name&nbsp;:&nbsp;" + item.game.name + "<br />";
-        profil += "             Unit price&nbsp;:&nbsp;" + item.game.price + "&nbsp;$<br />";
-        profil += "             Quantity&nbsp;:&nbsp;" + item.quantity + "<br />";
-        profil += "             Subtotal&nbsp;:&nbsp;" + item.subTotal + "&nbsp;$";
-        profil += "         </td>";
-        profil += "     </tr>";
-    }
-    for(var i in items) {
-        item = items[i];
         profil += "     <tr>";
         profil += "         <td><img alt=\"Cover\" src=\"" + item.game.urlCover + "\" width=\"100px\" height=\"130px\" /></td>";
         profil += "         <td style=\"vertical-align: top;\">";

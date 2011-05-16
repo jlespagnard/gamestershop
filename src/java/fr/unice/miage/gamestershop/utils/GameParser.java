@@ -175,7 +175,8 @@ public class GameParser {
 
                 Collection<Pegi> pegis = new LinkedList<Pegi>();
                 pegis.add(Pegi.getPegiByName((jeu.getElementsByTagName("ESRBAgeRating").getLength()>0?jeu.getElementsByTagName("ESRBAgeRating").item(0).getTextContent():"NoPE")));
-
+                
+                remainingQuantity = 5;
                Game g = new Game(name, description, urlCover, developer, publisher, release, price, isAvailable, remainingQuantity, genders, imagesUrl, features, platform, pegis);
                listeJeux.add(g);
             }
