@@ -4,12 +4,13 @@
  */
 package fr.unice.miage.gamestershop.servlet;
 
+import fr.unice.miage.gamestershop.entity.Game;
 import fr.unice.miage.gamestershop.entity.Guest;
 import fr.unice.miage.gamestershop.entity.LineItem;
+import fr.unice.miage.gamestershop.manager.GameManager;
 import fr.unice.miage.gamestershop.manager.PurchaseOrderManager;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -33,6 +34,8 @@ public class PurchaseOrder extends HttpServlet {
 
     @EJB
     private PurchaseOrderManager orderManager;
+    @EJB
+    private GameManager gameManager;
     
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -43,7 +46,7 @@ public class PurchaseOrder extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        boolean success = true;
+        int codeRetour = 0;
         
         try {
             HttpSession session = request.getSession();
@@ -57,34 +60,59 @@ public class PurchaseOrder extends HttpServlet {
             int idGame = 0;
             int quantity = 0;
             BigDecimal totalPrice = BigDecimal.ZERO;
-            while(idGames.hasNext()) {
+            Game game;
+            while(codeRetour == 0 && idGames.hasNext()) {
                 idGame = Integer.parseInt(idGames.next());
                 quantity = itemsQuantitiesJson.getInt(String.valueOf(idGame));
                 
                 for(LineItem item : items) {
                     if(item.getGame().getId() == idGame) {
-                        item.setQuantity(quantity);
-                        item.setSubTotal(item.getGame().getPrice().multiply(new BigDecimal(quantity)));
-                        totalPrice = totalPrice.add(item.getSubTotal());
+                        game = gameManager.getGameById(idGame);
+                        System.out.println("GAME REMAINING QUANTITY = " + game.getRemainingQuantity());
+                        System.out.println("QUANTITY NEEDED = " + quantity);
+                        if(game.isIsAvailable() && game.getRemainingQuantity() >= quantity) {
+                            item.setGame(game);
+                            item.setQuantity(quantity);
+                            item.setSubTotal(item.getGame().getPrice().multiply(new BigDecimal(quantity)));
+                            totalPrice = totalPrice.add(item.getSubTotal());
+                        }
+                        else {
+                            codeRetour = 1;
+                        }
                         break;
                     }
                 }
             }
             
-            fr.unice.miage.gamestershop.entity.PurchaseOrder order = new fr.unice.miage.gamestershop.entity.PurchaseOrder(guest, new Timestamp(Calendar.getInstance().getTimeInMillis()), totalPrice);
-            order.setItems(items);
-            
-            order = orderManager.save(order);
-            if(order == null || order.getId() <= 0) {
-                success = false;
+            if(codeRetour == 0) {
+                fr.unice.miage.gamestershop.entity.PurchaseOrder order = new fr.unice.miage.gamestershop.entity.PurchaseOrder(guest, new Timestamp(Calendar.getInstance().getTimeInMillis()), totalPrice);
+                order.setItems(items);
+
+                order = orderManager.save(order);
+                if(order == null || order.getId() <= 0) {
+                    codeRetour = 2;
+                }
+                else {
+                    for(LineItem item : order.getItems()) {
+                        game = item.getGame();
+                        System.out.print("BEFORE setRemainingQuantity : remainingQuantity = " + game.getRemainingQuantity());
+                        game.setRemainingQuantity(game.getRemainingQuantity()-item.getQuantity());
+                        System.out.print("AFTER setRemainingQuantity : remainingQuantity = " + game.getRemainingQuantity());
+                        if(game.getRemainingQuantity() == 0) {
+                            game.setIsAvailable(false);
+                        }
+                        gameManager.save(game);
+                    }
+                    session.setAttribute("basket", new LinkedList<LineItem>());
+                }
             }
         }
         catch(Exception e) {
             System.out.println(e);
-            success = false;
+            codeRetour = 2;
         }
         
-        response.getWriter().println(success);
+        response.getWriter().println(codeRetour);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
