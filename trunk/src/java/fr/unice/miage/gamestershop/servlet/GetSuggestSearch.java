@@ -4,27 +4,27 @@
  */
 package fr.unice.miage.gamestershop.servlet;
 
-import fr.unice.miage.gamestershop.entity.Game;
-import fr.unice.miage.gamestershop.entity.LineItem;
 import fr.unice.miage.gamestershop.manager.GameManager;
-import fr.unice.miage.gamestershop.manager.PurchaseOrderManager;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * @author Julien LESPAGNARD
  * @author Anthony BONIN
  */
-@WebServlet(name = "RemoveOrder", urlPatterns = {"/RemoveOrder"})
-public class RemoveOrder extends HttpServlet {
+@WebServlet(name = "GetSuggestSearch", urlPatterns = {"/GetSuggestSearch"})
+public class GetSuggestSearch extends HttpServlet {
 
-    @EJB
-    private PurchaseOrderManager orderManager;
     @EJB
     private GameManager gameManager;
     
@@ -37,25 +37,14 @@ public class RemoveOrder extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        boolean success = true;
-        try {
-            int idOrder = Integer.parseInt(request.getParameter("idOrder"));
-            fr.unice.miage.gamestershop.entity.PurchaseOrder order = orderManager.remove(idOrder);
-            
-            Game game;
-            for(LineItem item : order.getItems()) {
-                game = item.getGame();
-                game.setRemainingQuantity(game.getRemainingQuantity()+item.getQuantity());
-                game.setIsAvailable(true);
-                gameManager.save(game);
-            }
-        }
-        catch(Exception e) {
-            success = false;
-            System.out.println(e);
-        }
+        String searchValue = request.getParameter("suggestValue");
         
-        response.getWriter().print(success);
+        Collection<String> suggestNames = gameManager.getSuggestGameName(searchValue);
+        
+        Map<String, Object> suggests = new LinkedHashMap<String, Object>();
+        suggests.put("source", suggestNames.toArray());
+        
+        response.getWriter().print(new JSONObject(suggests));
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

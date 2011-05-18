@@ -58,7 +58,7 @@ public class GameParser {
     /*
      * Nombre de pages du catalogue de jeux vidéo d'Amazon qu'on veut ajouter à notre base de données
      */
-    private static final int NB_PAGES = 10;
+    private static final int NB_PAGES = 9;
 
     
     public GameParser(Collection<GamePlatform> listePlatforms, Collection<GameGender> listeGenders) {
@@ -114,7 +114,7 @@ public class GameParser {
             for(int i = 0; i < nodeList.getLength(); i++){
                 Element jeu = (Element)nodeList.item(i);
 
-                String name =  jeu.getElementsByTagName("Title").item(0).getTextContent();
+                String name =  (jeu.getElementsByTagName("Title") == null || jeu.getElementsByTagName("Title").item(0) == null) ? "" : jeu.getElementsByTagName("Title").item(0).getTextContent();
                 String description =  (jeu.getElementsByTagName("Content").getLength()>1?jeu.getElementsByTagName("Content").item(1).getTextContent():jeu.getElementsByTagName("Content").getLength()>0?jeu.getElementsByTagName("Content").item(0).getTextContent():"No description");
                 String developer =  jeu.getElementsByTagName("Manufacturer").item(0).getTextContent();
                 String publisher =  jeu.getElementsByTagName("Publisher").item(0).getTextContent();
@@ -181,6 +181,7 @@ public class GameParser {
                listeJeux.add(g);
             }
         } catch (Exception e) {
+            System.out.println(e);
             throw new RuntimeException(e);
         }
     }

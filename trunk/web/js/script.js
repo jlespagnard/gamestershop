@@ -2,20 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-function getGamesByPlatform(idPlatform) {
-    $.post("GetGamesByPlatform", {idPlatform : idPlatform}, function(data){
-        alert(data);
-        var content = "<%@include file=\"games.jsp\" %>";
-        $("#content").html(content);
-    });
-}
-
 function addToBasket(idGame) {
-    $.post("AddToBasket", {idGame : idGame}, function(game){
-        var thisdialog = new dijit.Dialog({title: "Information", content: "Article ajout&eacute; au panier"});
-
-        var spanAv = ("#available_"+idGame);
-        if(game.isAvailable) {
+    jQuery.post("AddToBasket", {idGame : idGame}, function(game){
+        var spanAv = jQuery("#available_"+idGame);
+        if(game.available) {
             spanAv.html("Disponible");
             spanAv.attr("style", "color:lime;");
         }
@@ -23,37 +13,42 @@ function addToBasket(idGame) {
             spanAv.html("Non disponible");
             spanAv.attr("style", "color:red;");
         }
-
-        thisdialog.show();
+        new dijit.Dialog({title: "Information", content: "Article ajout&eacute; au panier"}).show();
     },"json");
 }
 
+function showImageDialog(idImage) {
+    var urlImage = dojo.attr(idImage,'src');
+    var imgbal = "<img alt=\"" + urlImage + "\" src=\"" + urlImage + "\" /><br />";
+    new dijit.Dialog({title: "Screenshot", content: imgbal}).show();
+}
+
 function modifierQuantite(idGame, price) {
-    var oldSubTotal = $("#subTotal_"+idGame).html();
-    var quantite = $("#quantity_"+idGame).val();
-    $("#subTotal_"+idGame).html(quantite*price);
+    var oldSubTotal = jQuery("#subTotal_"+idGame).html();
+    var quantite = jQuery("#quantity_"+idGame).val();
+    jQuery("#subTotal_"+idGame).html(quantite*price);
     
-    var totalPrice = $("#totalPrice").html();
+    var totalPrice = jQuery("#totalPrice").html();
     totalPrice = totalPrice-oldSubTotal;
     totalPrice = totalPrice+(quantite*price);
-    $("#totalPrice").html(totalPrice);
+    jQuery("#totalPrice").html(totalPrice);
 }
 
 function addRemoveShippingAddress() {    
     if(dijit.byId("hasShippingAddress").checked) {
-        $("#divShippingAddress").attr("style", "visibility: visible;");
+        jQuery("#divShippingAddress").attr("style", "visibility: visible;");
     }
     else {
-        $("#divShippingAddress").attr("style", "visibility: hidden;");
+        jQuery("#divShippingAddress").attr("style", "visibility: hidden;");
     }
 }
 
 function addRemoveShippingAddress_sign() {    
     if(dijit.byId("hasShippingAddress_sign").checked) {
-        $("#divShippingAddress_sign").attr("style", "visibility: visible;");
+        jQuery("#divShippingAddress_sign").attr("style", "visibility: visible;");
     }
     else {
-        $("#divShippingAddress_sign").attr("style", "visibility: hidden;");
+        jQuery("#divShippingAddress_sign").attr("style", "visibility: hidden;");
     }
 }
 
@@ -65,8 +60,19 @@ function showSignupDialog() {
     dijit.byId('signupDialog').show();
 }
 
+function suggestSearch(value) {
+    jQuery.post("GetSuggestSearch", {suggestValue: value}, function(data) {
+        if(data != null && data.source != null && data.source.length > 0) {
+            jQuery("input#searchGameValue").autocomplete({
+                delay: 0,
+                source: data.source
+            });
+        }
+    },"json");
+}
+
 function connectGuest() {
-    $.post("ConnectGuest", {email:$("#email_conn").val(), password:$("#password_conn").val()}, function(success) {
+    jQuery.post("ConnectGuest", {email:jQuery("#email_conn").val(), password:jQuery("#password_conn").val()}, function(success) {
         if(success) {
             document.location.href="home.jsp";
             dijit.byId('connectionDialog').hide();
@@ -78,26 +84,26 @@ function connectGuest() {
 }
 
 function signupGuest(idGuest) {    
-    $.post("SignupGuest", {firstname:$("#firstname_sign").val(), 
-                            surname:$("#surname_sign").val(), 
-                            email:$("#email_sign").val(), 
-                            password:$("#password_sign").val(),
-                            phone:$("#phone_sign").val(), 
-                            cellular:$("#cellular_sign").val(), 
-                            fax:$("#fax_sign").val(), 
-                            billingAddressNumber:$("#billingAddressNumber_sign").val(), 
-                            billingAddressRoad:$("#billingAddressRoad_sign").val(), 
-                            billingAddressExtraInfos:$("#billingAddressExtraInfos_sign").val(), 
-                            billingAddressZipCode:$("#billingAddressZipCode_sign").val(), 
-                            billingAddressCity:$("#billingAddressCity_sign").val(), 
-                            billingAddressCountrie:$("#billingAddressCountrie_sign").val(), 
-                            hasShippingAddress:$("#hasShippingAddress_sign").val(), 
-                            shippingAddressNumber:$("#shippingAddressNumber_sign").val(), 
-                            shippingAddressRoad:$("#shippingAddressRoad_sign").val(), 
-                            shippingAddressExtraInfos:$("#shippingAddressExtraInfos_sign").val(), 
-                            shippingAddressZipCode:$("#shippingAddressZipCode_sign").val(), 
-                            shippingAddressCity:$("#shippingAddressCity_sign").val(), 
-                            shippingAddressCountrie:$("#shippingAddressCountrie_sign").val()}, 
+    jQuery.post("SignupGuest", {firstname:jQuery("#firstname_sign").val(), 
+                            surname:jQuery("#surname_sign").val(), 
+                            email:jQuery("#email_sign").val(), 
+                            password:jQuery("#password_sign").val(),
+                            phone:jQuery("#phone_sign").val(), 
+                            cellular:jQuery("#cellular_sign").val(), 
+                            fax:jQuery("#fax_sign").val(), 
+                            billingAddressNumber:jQuery("#billingAddressNumber_sign").val(), 
+                            billingAddressRoad:jQuery("#billingAddressRoad_sign").val(), 
+                            billingAddressExtraInfos:jQuery("#billingAddressExtraInfos_sign").val(), 
+                            billingAddressZipCode:jQuery("#billingAddressZipCode_sign").val(), 
+                            billingAddressCity:jQuery("#billingAddressCity_sign").val(), 
+                            billingAddressCountrie:jQuery("#billingAddressCountrie_sign").val(), 
+                            hasShippingAddress:jQuery("#hasShippingAddress_sign").val(), 
+                            shippingAddressNumber:jQuery("#shippingAddressNumber_sign").val(), 
+                            shippingAddressRoad:jQuery("#shippingAddressRoad_sign").val(), 
+                            shippingAddressExtraInfos:jQuery("#shippingAddressExtraInfos_sign").val(), 
+                            shippingAddressZipCode:jQuery("#shippingAddressZipCode_sign").val(), 
+                            shippingAddressCity:jQuery("#shippingAddressCity_sign").val(), 
+                            shippingAddressCountrie:jQuery("#shippingAddressCountrie_sign").val()}, 
             function(success) {
                 if(success) {
                     dijit.byId('signupForm').reset();
@@ -117,7 +123,7 @@ function signupGuest(idGuest) {
 }
 
 function getListProducts(firstResult) {
-    $.post("GetListProducts",{firstResult: firstResult}, function(data) {
+    jQuery.post("GetListProducts",{firstResult: firstResult}, function(data) {
         var products = data.products;
         var nbTotalProducts = data.nbTotalProducts;
         
@@ -163,12 +169,12 @@ function getListProducts(firstResult) {
         contentDiv += "     </td>";
         contentDiv += " </tr>";
         contentDiv += "</table>";
-        $("#content").html(contentDiv);
+        jQuery("#content").html(contentDiv);
     },"json");
 }
 
 function removeProduct(idProduct, firstResult) {
-    $.post("RemoveProduct",{idProduct: idProduct}, function(data) {
+    jQuery.post("RemoveProduct",{idProduct: idProduct}, function(data) {
         if(data) {
             new dijit.Dialog({title: "Information", content: "Product has been removed."}).show();
         }
@@ -180,7 +186,7 @@ function removeProduct(idProduct, firstResult) {
 }
 
 function getListGuests(idCurrentGuest,firstResult) {
-    $.post("GetListGuests",{firstResult: firstResult}, function(data) {
+    jQuery.post("GetListGuests",{firstResult: firstResult}, function(data) {
         var guests = data.guests;
         var nbTotalGuests = data.nbTotalGuests;
         
@@ -280,12 +286,12 @@ function getListGuests(idCurrentGuest,firstResult) {
         contentDiv += "     </td>";
         contentDiv += " </tr>";
         contentDiv += "</table>";
-        $("#content").html(contentDiv);
+        jQuery("#content").html(contentDiv);
     },"json");
 }
 
 function removeGuest(idCurrentGuest, idGuest, firstResult) {
-    $.post("RemoveGuest",{idGuest: idGuest}, function(data) {
+    jQuery.post("RemoveGuest",{idGuest: idGuest}, function(data) {
         if(data) {
             new dijit.Dialog({title: "Information", content: "Guest has been removed."}).show();
         }
@@ -302,14 +308,14 @@ function purchaseOrder(idCurrentGuest) {
     }
     else {
         var itemsQuantities = "{";
-        $('input.[id^="quantity_"]').each(function(){
+        jQuery('input.[id^="quantity_"]').each(function(){
             var id = this.id.replace("quantity_", "");
             itemsQuantities += id+":"+this.value+",";
         });
         itemsQuantities = itemsQuantities.substr(0, itemsQuantities.length-1);
         itemsQuantities += "}";
         alert(itemsQuantities);
-        $.post("PurchaseOrder", {itemsQuantities:itemsQuantities}, function(data) {
+        jQuery.post("PurchaseOrder", {itemsQuantities:itemsQuantities}, function(data) {
             if(data == 0) {
                 var dialog = new dijit.Dialog({title: "Information", content: "Your order has been placed."});
                 dialog.show();
@@ -417,7 +423,7 @@ function showItemsDialog(index) {
 }
 
 function removeOrder(idOrder, firstResult) {
-    $.post("RemoveOrder",{idOrder: idOrder}, function(data) {
+    jQuery.post("RemoveOrder",{idOrder: idOrder}, function(data) {
         if(data) {
             new dijit.Dialog({title: "Information", content: "Order has been removed."}).show();
         }
@@ -429,7 +435,7 @@ function removeOrder(idOrder, firstResult) {
 }
 
 function getListOrders(firstResult) {
-    $.post("GetListOrders",{firstResult: firstResult}, function(data) {
+    jQuery.post("GetListOrders",{firstResult: firstResult}, function(data) {
         var orders = data.orders;
         var nbTotalOrders = data.nbTotalOrders;
         
@@ -476,6 +482,6 @@ function getListOrders(firstResult) {
         contentDiv += "     </td>";
         contentDiv += " </tr>";
         contentDiv += "</table>";
-        $("#content").html(contentDiv);
+        jQuery("#content").html(contentDiv);
     },"json");
 }
