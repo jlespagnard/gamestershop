@@ -50,8 +50,7 @@ public class Game implements Serializable {
     private int remainingQuantity;
     @ManyToMany
     private Collection<GameGender> genders;
-    @JoinColumn(nullable=false)
-    @ManyToOne
+    @ManyToOne(optional=false)
     private GamePlatform platform;
     private Collection<Pegi> pegis = null;
     private Collection<String> urlVideos = null;
