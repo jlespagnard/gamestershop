@@ -43,6 +43,7 @@ public class GetListOrders extends HttpServlet {
         
         Map<String,Object> retour = new LinkedHashMap<String, Object>();
         retour.put("nbTotalOrders", orderManager.count());
+        retour.put("nbOrders", orders.size());
         retour.put("orders", orders);
         response.getWriter().print(new JSONObject(retour));
     }

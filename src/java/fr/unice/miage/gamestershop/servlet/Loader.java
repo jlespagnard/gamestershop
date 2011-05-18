@@ -41,7 +41,7 @@ import javax.servlet.http.HttpSession;
             urlPatterns={"/Loader"},
             initParams = {
     //IMPORTANT: METTRE ICI LE CHEMIN OU SE TROUVE LA RACINE DE VOTRE PROJET
-                @WebInitParam(name="ressourceDir", value="C:\\Users\\Mousztomania\\Documents\\Workspace\\gamestershop")
+                @WebInitParam(name="ressourceDir", value="D:\\Projets\\Miage\\M1\\NetBeans\\gamestershop")
             }
 )
 public class Loader extends HttpServlet {

@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -50,7 +51,8 @@ public class Game implements Serializable {
     private int remainingQuantity;
     @ManyToMany
     private Collection<GameGender> genders;
-    @ManyToOne(optional=false)
+    @JoinColumn(nullable=false)
+    @ManyToOne()
     private GamePlatform platform;
     private Collection<Pegi> pegis = null;
     private Collection<String> urlVideos = null;

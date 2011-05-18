@@ -8,7 +8,6 @@ import com.amazonaws.util.json.JSONObject;
 import fr.unice.miage.gamestershop.entity.Game;
 import fr.unice.miage.gamestershop.manager.GameManager;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -44,6 +43,7 @@ public class GetListProducts extends HttpServlet {
         
         Map<String,Object> retour = new LinkedHashMap<String, Object>();
         retour.put("nbTotalProducts", gameManager.countGames());
+        retour.put("nbProducts", games.size());
         retour.put("products", games);
         response.getWriter().print(new JSONObject(retour));
     }

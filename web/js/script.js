@@ -4,15 +4,6 @@
  */
 function addToBasket(idGame) {
     jQuery.post("AddToBasket", {idGame : idGame}, function(game){
-        var spanAv = jQuery("#available_"+idGame);
-        if(game.available) {
-            spanAv.html("Disponible");
-            spanAv.attr("style", "color:lime;");
-        }
-        else {
-            spanAv.html("Non disponible");
-            spanAv.attr("style", "color:red;");
-        }
         new dijit.Dialog({title: "Information", content: "Article ajout&eacute; au panier"}).show();
     },"json");
 }
@@ -125,50 +116,56 @@ function signupGuest(idGuest) {
 function getListProducts(firstResult) {
     jQuery.post("GetListProducts",{firstResult: firstResult}, function(data) {
         var products = data.products;
+        var nbProducts = data.nbProducts;
         var nbTotalProducts = data.nbTotalProducts;
         
         var contentDiv = "";
-        contentDiv += "<table style=\"width: 100%;\">";
-        contentDiv += "  <tr class=\"titleTable\">";
-        contentDiv += "      <td>Cover</td>";
-        contentDiv += "      <td style=\"width: 40%;\">Name</td>";
-        contentDiv += "      <td style=\"width: 15%;\">Paltform</td>";
-        contentDiv += "      <td style=\"width: 10%;\">Price</td>";
-        contentDiv += "      <td style=\"width: 10%;\">Quantity</td>";
-        contentDiv += "      <td class=\"transcol\" style=\"width: 5%;\">&nbsp;</td>";
-        contentDiv += "  </tr>";
-        for(var i in products) {
-            var product = products[i];
-            if(parseInt(i) % 2 == 0) {
-                contentDiv += "  <tr class=\"dataTableLight\">";
-            }
-            else {
-                contentDiv += "  <tr class=\"dataTable\">";
-            }
-            contentDiv += "      <td style=\"text-align: center;\"><img alt=\"cover\" src=\"" + product.urlCover + "\" width=\"100px\" height=\"130px\" /></td>";
-            contentDiv += "      <td>" + product.name + "</td>";
-            contentDiv += "      <td>" + product.platform.name + "</td>";
-            contentDiv += "      <td>" + product.price + "&nbsp;$</td>";
-            contentDiv += "      <td>" + product.remainingQuantity + "</td>";
-            contentDiv += "      <td class=\"transcol\"><img src=\"images/remove.png\" onclick=\"removeProduct(" + product.id + "," + firstResult + ");\" /></td>";
+        if(nbProducts <= 0) {
+            contentDiv += "<span>No product found.</span>"
+        }
+        else {
+            contentDiv += "<table style=\"width: 100%;\">";
+            contentDiv += "  <tr class=\"titleTable\">";
+            contentDiv += "      <td>Cover</td>";
+            contentDiv += "      <td style=\"width: 40%;\">Name</td>";
+            contentDiv += "      <td style=\"width: 15%;\">Paltform</td>";
+            contentDiv += "      <td style=\"width: 10%;\">Price</td>";
+            contentDiv += "      <td style=\"width: 10%;\">Quantity</td>";
+            contentDiv += "      <td class=\"transcol\" style=\"width: 5%;\">&nbsp;</td>";
             contentDiv += "  </tr>";
+            for(var i=0;i<nbProducts;i++) {
+                var product = products[i];
+                if(parseInt(i) % 2 == 0) {
+                    contentDiv += "  <tr class=\"dataTableLight\">";
+                }
+                else {
+                    contentDiv += "  <tr class=\"dataTable\">";
+                }
+                contentDiv += "      <td style=\"text-align: center;\"><img alt=\"cover\" src=\"" + product.urlCover + "\" width=\"100px\" height=\"130px\" /></td>";
+                contentDiv += "      <td>" + product.name + "</td>";
+                contentDiv += "      <td>" + product.platform.name + "</td>";
+                contentDiv += "      <td>" + product.price + "&nbsp;$</td>";
+                contentDiv += "      <td>" + product.remainingQuantity + "</td>";
+                contentDiv += "      <td class=\"transcol\"><img src=\"images/remove.png\" onclick=\"removeProduct(" + product.id + "," + firstResult + ");\" /></td>";
+                contentDiv += "  </tr>";
+            }
+            contentDiv += " <tr>";
+            contentDiv += "     <td colspan=\"5\" style=\"text-align: center;\">";
+            if(parseInt(firstResult) > 0) {
+                contentDiv += "         <a href=\"#\" onclick=\"getListProducts(" + (firstResult-10) + ")\"><img src=\"images/array_previous.png\" /></a>&nbsp;";
+            }
+            var firstResultPlusDix = parseInt(firstResult) + 10;
+            if(firstResultPlusDix > nbTotalProducts) {
+                firstResultPlusDix = nbTotalProducts;
+            }
+            contentDiv += "         <span>" + (firstResult+1) + "&nbsp;&agrave;&nbsp;" + firstResultPlusDix + "&nbsp;sur&nbsp;" + nbTotalProducts + "</span>&nbsp;";
+            if(firstResultPlusDix < nbTotalProducts) {
+                contentDiv += "         <a href=\"#\" onclick=\"getListProducts(" + firstResultPlusDix + ")\"><img src=\"images/array_next.png\" /></a>";
+            }
+            contentDiv += "     </td>";
+            contentDiv += " </tr>";
+            contentDiv += "</table>";
         }
-        contentDiv += " <tr>";
-        contentDiv += "     <td colspan=\"5\" style=\"text-align: center;\">";
-        if(parseInt(firstResult) > 0) {
-            contentDiv += "         <a href=\"#\" onclick=\"getListProducts(" + (firstResult-10) + ")\"><img src=\"images/array_previous.png\" /></a>&nbsp;";
-        }
-        var firstResultPlusDix = parseInt(firstResult) + 10;
-        if(firstResultPlusDix > nbTotalProducts) {
-            firstResultPlusDix = nbTotalProducts;
-        }
-        contentDiv += "         <span>" + (firstResult+1) + "&nbsp;&agrave;&nbsp;" + firstResultPlusDix + "&nbsp;sur&nbsp;" + nbTotalProducts + "</span>&nbsp;";
-        if(firstResultPlusDix < nbTotalProducts) {
-            contentDiv += "         <a href=\"#\" onclick=\"getListProducts(" + firstResultPlusDix + ")\"><img src=\"images/array_next.png\" /></a>";
-        }
-        contentDiv += "     </td>";
-        contentDiv += " </tr>";
-        contentDiv += "</table>";
         jQuery("#content").html(contentDiv);
     },"json");
 }
@@ -185,107 +182,120 @@ function removeProduct(idProduct, firstResult) {
     },"json");
 }
 
+function removeItem(idItem) {
+    alert(idItem);
+    jQuery.post("RemoveItem",{idItem: idItem}, function(data) {
+        document.location.href = "basket.jsp";
+    },"json");
+}
+
 function getListGuests(idCurrentGuest,firstResult) {
     jQuery.post("GetListGuests",{firstResult: firstResult}, function(data) {
         var guests = data.guests;
+        var nbGuests = data.nbGuests;
         var nbTotalGuests = data.nbTotalGuests;
         
         var contentDiv = "";
-        contentDiv += "<table style=\"width: 100%;\">";
-        contentDiv += "  <tr class=\"titleTable\">";
-        contentDiv += "      <td>Firstname</td>";
-        contentDiv += "      <td>Surname</td>";
-        contentDiv += "      <td>Email</td>";
-        contentDiv += "      <td>Contact</td>";
-        contentDiv += "      <td>Address</td>";
-        contentDiv += "      <td class=\"transcol\">&nbsp;</td>";
-        contentDiv += "  </tr>";
-        for(var i in guests) {
-            var guest = guests[i];
-            if(parseInt(i) % 2 == 0) {
-                contentDiv += "  <tr class=\"dataTableLight\">";
-            }
-            else {
-                contentDiv += "  <tr class=\"dataTable\">";
-            }
-            contentDiv += "      <td>" + guest.firstname + "</td>";
-            contentDiv += "      <td>" + guest.surname + "</td>";
-            contentDiv += "      <td>" + guest.email + "</td>";
-            if(guest.contact != null) {
+        if(nbGuests <= 0) {
+            contentDiv += "<span>No guest found.</span>"
+        }
+        else {
+            contentDiv += "<table style=\"width: 100%;\">";
+            contentDiv += "  <tr class=\"titleTable\">";
+            contentDiv += "      <td>Firstname</td>";
+            contentDiv += "      <td>Surname</td>";
+            contentDiv += "      <td>Email</td>";
+            contentDiv += "      <td>Contact</td>";
+            contentDiv += "      <td>Address</td>";
+            contentDiv += "      <td class=\"transcol\">&nbsp;</td>";
+            contentDiv += "  </tr>";
+            for(var i=0;i<nbGuests;i++) {
+                var guest = guests[i];
+                if(parseInt(i) % 2 == 0) {
+                    contentDiv += "  <tr class=\"dataTableLight\">";
+                }
+                else {
+                    contentDiv += "  <tr class=\"dataTable\">";
+                }
+                contentDiv += "      <td>" + guest.firstname + "</td>";
+                contentDiv += "      <td>" + guest.surname + "</td>";
+                contentDiv += "      <td>" + guest.email + "</td>";
+                if(guest.contact != null) {
+                    contentDiv += "      <td>";
+                    contentDiv += "          <table>";
+                    contentDiv += "              <tr>";
+                    contentDiv += "                  <td>Phone number : " + guest.contact.phone + "</td>";
+                    contentDiv += "              </tr>";
+                    contentDiv += "              <tr>";
+                    contentDiv += "                  <td>Cellular : " + guest.contact.cellular + "</td>";
+                    contentDiv += "              </tr>";
+                    contentDiv += "              <tr>";
+                    contentDiv += "                  <td>Fax number : " + guest.contact.fax + "</td>";
+                    contentDiv += "              </tr>";
+                    contentDiv += "          </table>";
+                    contentDiv += "      </td>";
+                }
+                else {
+                    contentDiv += "      <td>&nbsp;</td>";
+                }
+
                 contentDiv += "      <td>";
                 contentDiv += "          <table>";
                 contentDiv += "              <tr>";
-                contentDiv += "                  <td>Phone number : " + guest.contact.phone + "</td>";
-                contentDiv += "              </tr>";
-                contentDiv += "              <tr>";
-                contentDiv += "                  <td>Cellular : " + guest.contact.cellular + "</td>";
-                contentDiv += "              </tr>";
-                contentDiv += "              <tr>";
-                contentDiv += "                  <td>Fax number : " + guest.contact.fax + "</td>";
-                contentDiv += "              </tr>";
-                contentDiv += "          </table>";
-                contentDiv += "      </td>";
-            }
-            else {
-                contentDiv += "      <td>&nbsp;</td>";
-            }
-            
-            contentDiv += "      <td>";
-            contentDiv += "          <table>";
-            contentDiv += "              <tr>";
-            contentDiv += "                  <td style=\"vertical-align: top;\">Billing Address</td>";
-            contentDiv += "                  <td>";
-            contentDiv += "                      Number : " + guest.billingAddress.number + "<br />";
-            contentDiv += "                      Road : " + guest.billingAddress.road + "<br />";
-            if(guest.billingAddress.suppInfos != null) {
-                contentDiv += "                      Extra informations : " + guest.billingAddress.suppInfos + "<br />";
-            }
-            contentDiv += "                      Zip code : " + guest.billingAddress.zipCode + "<br />";
-            contentDiv += "                      City : " + guest.billingAddress.city + "<br />";
-            contentDiv += "                      Countrie : " + guest.billingAddress.countrie + "<br />";
-            contentDiv += "                  </td>";
-            contentDiv += "              </tr>";
-            if(guest.shippingAddress != null) {
-                contentDiv += "              <tr>";
-                contentDiv += "                  <td style=\"vertical-align: top;\">Shipping Address</td>";
+                contentDiv += "                  <td style=\"vertical-align: top;\">Billing Address</td>";
                 contentDiv += "                  <td>";
-                contentDiv += "                      Number : " + guest.shippingAddress.number + "<br />";
-                contentDiv += "                      Road : " + guest.shippingAddress.road + "<br />";
-                if(guest.shippingAddress.suppInfos != null) {
-                    contentDiv += "                      Extra informations : " + guest.shippingAddress.suppInfos + "<br />";
+                contentDiv += "                      Number : " + guest.billingAddress.number + "<br />";
+                contentDiv += "                      Road : " + guest.billingAddress.road + "<br />";
+                if(guest.billingAddress.suppInfos != null) {
+                    contentDiv += "                      Extra informations : " + guest.billingAddress.suppInfos + "<br />";
                 }
-                contentDiv += "                      Zip code : " + guest.shippingAddress.zipCode + "<br />";
-                contentDiv += "                      City : " + guest.shippingAddress.city + "<br />";
-                contentDiv += "                      Countrie : " + guest.shippingAddress.countrie + "<br />";
+                contentDiv += "                      Zip code : " + guest.billingAddress.zipCode + "<br />";
+                contentDiv += "                      City : " + guest.billingAddress.city + "<br />";
+                contentDiv += "                      Countrie : " + guest.billingAddress.countrie + "<br />";
                 contentDiv += "                  </td>";
                 contentDiv += "              </tr>";
+                if(guest.shippingAddress != null) {
+                    contentDiv += "              <tr>";
+                    contentDiv += "                  <td style=\"vertical-align: top;\">Shipping Address</td>";
+                    contentDiv += "                  <td>";
+                    contentDiv += "                      Number : " + guest.shippingAddress.number + "<br />";
+                    contentDiv += "                      Road : " + guest.shippingAddress.road + "<br />";
+                    if(guest.shippingAddress.suppInfos != null) {
+                        contentDiv += "                      Extra informations : " + guest.shippingAddress.suppInfos + "<br />";
+                    }
+                    contentDiv += "                      Zip code : " + guest.shippingAddress.zipCode + "<br />";
+                    contentDiv += "                      City : " + guest.shippingAddress.city + "<br />";
+                    contentDiv += "                      Countrie : " + guest.shippingAddress.countrie + "<br />";
+                    contentDiv += "                  </td>";
+                    contentDiv += "              </tr>";
+                }
+                contentDiv += "          </table>";
+                contentDiv += "      </td>";
+                if(guest.id == idCurrentGuest) {
+                    contentDiv += "      <td class=\"transcol\">&nbsp;</td>";
+                }
+                else {
+                    contentDiv += "      <td class=\"transcol\"><img src=\"images/remove.png\" onclick=\"removeGuest(" + idCurrentGuest + "," + guest.id + "," + firstResult + ");\" /></td>";
+                }
+                contentDiv += "  </tr>";
             }
-            contentDiv += "          </table>";
-            contentDiv += "      </td>";
-            if(guest.id == idCurrentGuest) {
-                contentDiv += "      <td class=\"transcol\">&nbsp;</td>";
+            contentDiv += " <tr>";
+            contentDiv += "     <td colspan=\"5\" style=\"text-align: center;\">";
+            if(parseInt(firstResult) > 0) {
+                contentDiv += "         <a href=\"#\" onclick=\"getListGuests(" + idCurrentGuest + "," + (firstResult-10) + ")\"><img src=\"images/array_previous.png\" /></a>&nbsp;";
             }
-            else {
-                contentDiv += "      <td class=\"transcol\"><img src=\"images/remove.png\" onclick=\"removeGuest(" + idCurrentGuest + "," + guest.id + "," + firstResult + ");\" /></td>";
+            var firstResultPlusDix = parseInt(firstResult) + 10;
+            if(firstResultPlusDix > nbTotalGuests) {
+                firstResultPlusDix = nbTotalGuests;
             }
-            contentDiv += "  </tr>";
+            contentDiv += "         <span>" + (firstResult+1) + "&nbsp;&agrave;&nbsp;" + firstResultPlusDix + "&nbsp;sur&nbsp;" + nbTotalGuests + "</span>&nbsp;";
+            if(firstResultPlusDix < nbTotalGuests) {
+                contentDiv += "         <a href=\"#\" onclick=\"getListGuests(" + idCurrentGuest + "," + firstResultPlusDix + ")\"><img src=\"images/array_next.png\" /></a>";
+            }
+            contentDiv += "     </td>";
+            contentDiv += " </tr>";
+            contentDiv += "</table>";
         }
-        contentDiv += " <tr>";
-        contentDiv += "     <td colspan=\"5\" style=\"text-align: center;\">";
-        if(parseInt(firstResult) > 0) {
-            contentDiv += "         <a href=\"#\" onclick=\"getListGuests(" + idCurrentGuest + "," + (firstResult-10) + ")\"><img src=\"images/array_previous.png\" /></a>&nbsp;";
-        }
-        var firstResultPlusDix = parseInt(firstResult) + 10;
-        if(firstResultPlusDix > nbTotalGuests) {
-            firstResultPlusDix = nbTotalGuests;
-        }
-        contentDiv += "         <span>" + (firstResult+1) + "&nbsp;&agrave;&nbsp;" + firstResultPlusDix + "&nbsp;sur&nbsp;" + nbTotalGuests + "</span>&nbsp;";
-        if(firstResultPlusDix < nbTotalGuests) {
-            contentDiv += "         <a href=\"#\" onclick=\"getListGuests(" + idCurrentGuest + "," + firstResultPlusDix + ")\"><img src=\"images/array_next.png\" /></a>";
-        }
-        contentDiv += "     </td>";
-        contentDiv += " </tr>";
-        contentDiv += "</table>";
         jQuery("#content").html(contentDiv);
     },"json");
 }
@@ -436,89 +446,94 @@ function removeOrder(idOrder, firstResult) {
 function getListOrders(firstResult) {
     jQuery.post("GetListOrders",{firstResult: firstResult}, function(data) {
         var orders = data.orders;
+        var nbOrders = data.nbOrders;
         var nbTotalOrders = data.nbTotalOrders;
         
         var contentDiv = "";
-        contentDiv += "<table style=\"width: 100%;\">";
-        contentDiv += "  <tr class=\"titleTable\">";
-        contentDiv += "      <td>Date</td>";
-        contentDiv += "      <td>Amount</td>";
-        contentDiv += "      <td>ID Guest</td>";
-        contentDiv += "      <td>ID Items</td>";
-        contentDiv += "      <td class=\"transcol\" style=\"width: 5%;\">&nbsp;</td>";
-        contentDiv += "  </tr>";
-        for(var i in orders) {
-            var order = orders[i];
-            guestsGlobal[i] = order.guest;
-            itemsGlobal[i] = order.items;
-            
-            if(parseInt(i) % 2 == 0) {
-                contentDiv += "  <tr class=\"dataTableLight\">";
-            }
-            else {
-                contentDiv += "  <tr class=\"dataTable\">";
-            }
-            contentDiv += "      <td>" + order.orderDate + "</td>";
-            contentDiv += "      <td>" + order.totalBasePrice + "&nbsp;$</td>";
-            contentDiv += "      <td>" + order.guest.id + "&nbsp;<img style=\"float:right;vertical-align:bottom;\" src=\"images/eye.png\" onclick=\"showProfilDialog(" + i + ");\" /></td>";
-            contentDiv += "      <td>" + order.nbItems + "&nbsp;<img style=\"float:right;vertical-align:bottom;\" alt=\"See items\" src=\"images/eye.png\" onclick=\"showItemsDialog(" + i + ");\" /></td>";
-            contentDiv += "      <td class=\"transcol\"><img src=\"images/remove.png\" onclick=\"removeOrder(" + order.id + "," + firstResult + ");\" /></td>";
+        if(nbOrders <= 0) {
+            contentDiv += "<span>No order found.</span>"
+        }
+        else {
+            contentDiv += "<table style=\"width: 100%;\">";
+            contentDiv += "  <tr class=\"titleTable\">";
+            contentDiv += "      <td>Date</td>";
+            contentDiv += "      <td>Amount</td>";
+            contentDiv += "      <td>ID Guest</td>";
+            contentDiv += "      <td>ID Items</td>";
+            contentDiv += "      <td class=\"transcol\" style=\"width: 5%;\">&nbsp;</td>";
             contentDiv += "  </tr>";
+            for(var i=0;i<nbOrders;i++) {
+                var order = orders[i];
+                guestsGlobal[i] = order.guest;
+                itemsGlobal[i] = order.items;
+
+                if(parseInt(i) % 2 == 0) {
+                    contentDiv += "  <tr class=\"dataTableLight\">";
+                }
+                else {
+                    contentDiv += "  <tr class=\"dataTable\">";
+                }
+                contentDiv += "      <td>" + order.orderDate + "</td>";
+                contentDiv += "      <td>" + order.totalBasePrice + "&nbsp;$</td>";
+                contentDiv += "      <td>" + order.guest.id + "&nbsp;<img style=\"float:right;vertical-align:bottom;\" src=\"images/eye.png\" onclick=\"showProfilDialog(" + i + ");\" /></td>";
+                contentDiv += "      <td>" + order.nbItems + "&nbsp;<img style=\"float:right;vertical-align:bottom;\" alt=\"See items\" src=\"images/eye.png\" onclick=\"showItemsDialog(" + i + ");\" /></td>";
+                contentDiv += "      <td class=\"transcol\"><img src=\"images/remove.png\" onclick=\"removeOrder(" + order.id + "," + firstResult + ");\" /></td>";
+                contentDiv += "  </tr>";
+            }
+            contentDiv += " <tr>";
+            contentDiv += "     <td colspan=\"5\" style=\"text-align: center;\">";
+            if(parseInt(firstResult) > 0) {
+                contentDiv += "         <a href=\"#\" onclick=\"getListProducts(" + (firstResult-10) + ")\"><img src=\"images/array_previous.png\" /></a>&nbsp;";
+            }
+            var firstResultPlusDix = parseInt(firstResult) + 10;
+            if(firstResultPlusDix > nbTotalOrders) {
+                firstResultPlusDix = nbTotalOrders;
+            }
+            contentDiv += "         <span>" + (firstResult+1) + "&nbsp;&agrave;&nbsp;" + firstResultPlusDix + "&nbsp;sur&nbsp;" + nbTotalOrders + "</span>&nbsp;";
+            if(firstResultPlusDix < nbTotalOrders) {
+                contentDiv += "         <a href=\"#\" onclick=\"getListProducts(" + firstResultPlusDix + ")\"><img src=\"images/array_next.png\" /></a>";
+            }
+            contentDiv += "     </td>";
+            contentDiv += " </tr>";
+            contentDiv += "</table>";
         }
-        contentDiv += " <tr>";
-        contentDiv += "     <td colspan=\"5\" style=\"text-align: center;\">";
-        if(parseInt(firstResult) > 0) {
-            contentDiv += "         <a href=\"#\" onclick=\"getListProducts(" + (firstResult-10) + ")\"><img src=\"images/array_previous.png\" /></a>&nbsp;";
-        }
-        var firstResultPlusDix = parseInt(firstResult) + 10;
-        if(firstResultPlusDix > nbTotalOrders) {
-            firstResultPlusDix = nbTotalOrders;
-        }
-        contentDiv += "         <span>" + (firstResult+1) + "&nbsp;&agrave;&nbsp;" + firstResultPlusDix + "&nbsp;sur&nbsp;" + nbTotalOrders + "</span>&nbsp;";
-        if(firstResultPlusDix < nbTotalOrders) {
-            contentDiv += "         <a href=\"#\" onclick=\"getListProducts(" + firstResultPlusDix + ")\"><img src=\"images/array_next.png\" /></a>";
-        }
-        contentDiv += "     </td>";
-        contentDiv += " </tr>";
-        contentDiv += "</table>";
         jQuery("#content").html(contentDiv);
     },"json");
 }
 
-function addProduct() {
-
-    var gender_sign_var = "{";
-        jQuery('option.[id^="gender_"]').each(function(){
-            gender_sign_var += this.value+",";
-        });
-
-    var platforms_sign_var = "{";
-        jQuery('option.[id^="plat_"]').each(function(){
-            platforms_sign_var += this.value+",";
-        });
-
-        itemsQuantities = itemsQuantities.substr(0, itemsQuantities.length-1);
-        itemsQuantities += "}";
-    jQuery.post("AddProduct", {title_sign:jQuery("#title_sign").val(),
-                            description_sign:jQuery("#description_sign").val(),
-                            cover_sign:jQuery("#cover_sign").val(),
-                            developper_sign:jQuery("#developper_sign").val(),
-                            publisher_sign:jQuery("#publisher_sign").val(),
-                            price_sign:jQuery("#price_sign").val(),
-                            quantity_sign:jQuery("#quantity_sign").val(),
-                            screenshot_sign:jQuery("#screenshot_sign").val(),
-                            features_sign:jQuery("#features_sign").val(),
-                            release_sign:jQuery("#release_sign").val(),
-                            platforms_sign:platforms_sign_var(),
-                            ESRB_sign:jQuery("#ESRB_sign").val(),
-                            gender_sign:gender_sign_var},
-            function(success) {
-                if(success) {
-                    dijit.byId('newProductForm').reset();
-                    new dijit.Dialog({title: "Product added", content: "The product has been correctly added."}).show();
-                    document.location.href="addProduct.jsp";
-                } else {
-                    new dijit.Dialog({title: "Error", content: "A problem occured."}).show();
-                }
-            },"json");
-}
+//function addProduct() {
+//    var gender_sign_var = "{";
+//    jQuery('option.[id^="gender_"]').each(function(){
+//        gender_sign_var += this.value+",";
+//    });
+//
+//    var platforms_sign_var = "{";
+//    jQuery('option.[id^="plat_"]').each(function(){
+//        platforms_sign_var += this.value+",";
+//    });
+//
+//    itemsQuantities = itemsQuantities.substr(0, itemsQuantities.length-1);
+//    itemsQuantities += "}";
+//    jQuery.post("AddProduct", {title_sign:jQuery("#title_sign").val(),
+//                            description_sign:jQuery("#description_sign").val(),
+//                            cover_sign:jQuery("#cover_sign").val(),
+//                            developper_sign:jQuery("#developper_sign").val(),
+//                            publisher_sign:jQuery("#publisher_sign").val(),
+//                            price_sign:jQuery("#price_sign").val(),
+//                            quantity_sign:jQuery("#quantity_sign").val(),
+//                            screenshot_sign:jQuery("#screenshot_sign").val(),
+//                            features_sign:jQuery("#features_sign").val(),
+//                            release_sign:jQuery("#release_sign").val(),
+//                            platforms_sign:platforms_sign_var(),
+//                            ESRB_sign:jQuery("#ESRB_sign").val(),
+//                            gender_sign:gender_sign_var},
+//            function(success) {
+//                if(success) {
+//                    dijit.byId('newProductForm').reset();
+//                    new dijit.Dialog({title: "Product added", content: "The product has been correctly added."}).show();
+//                    document.location.href="addProduct.jsp";
+//                } else {
+//                    new dijit.Dialog({title: "Error", content: "A problem occured."}).show();
+//                }
+//            },"json");
+//}
