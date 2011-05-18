@@ -314,7 +314,6 @@ function purchaseOrder(idCurrentGuest) {
         });
         itemsQuantities = itemsQuantities.substr(0, itemsQuantities.length-1);
         itemsQuantities += "}";
-        alert(itemsQuantities);
         jQuery.post("PurchaseOrder", {itemsQuantities:itemsQuantities}, function(data) {
             if(data == 0) {
                 var dialog = new dijit.Dialog({title: "Information", content: "Your order has been placed."});

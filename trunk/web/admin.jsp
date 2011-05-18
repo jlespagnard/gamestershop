@@ -9,6 +9,6 @@
 <%@include file="header.jsp" %>
 <%@include file="menuAdmin.jsp" %>
 <div id="content" name="content" dojoType="dijit.layout.ContentPane" region="center">
-    Welcom admin !
+    Welcome admin !
 </div>
 <%@include file="footer.jsp" %>

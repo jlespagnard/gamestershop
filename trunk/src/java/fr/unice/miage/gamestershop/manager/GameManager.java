@@ -224,7 +224,7 @@ public class GameManager {
     }
     
     public long countGamesByIdPlatform(int platformId) {
-        Query q = em.createQuery("SELECT COUNT(DISTINCT(g)) FROM Game g WHERE g.platform.id = :id");
+        Query q = em.createQuery("SELECT COUNT(DISTINCT(g.id)) FROM Game g WHERE g.platform.id = :id");
         q.setParameter("id", platformId);
 
         return (Long)q.getSingleResult();
