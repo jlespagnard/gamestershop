@@ -37,4 +37,10 @@ public class GameGenderManager {
         Query q = em.createQuery("SELECT g FROM GameGender g");
         return q.getResultList();
     }
+
+    public GameGender getGenderByName(String name){
+        Query q = em.createQuery("SELECT p FROM GameGender p WHERE p.name LIKE :name");
+        q.setParameter("name", name);
+        return (GameGender)q.getSingleResult();
+    }
 }

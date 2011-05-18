@@ -11,6 +11,7 @@ import fr.unice.miage.gamestershop.entity.GameGender;
 import fr.unice.miage.gamestershop.entity.GamePlatform;
 import fr.unice.miage.gamestershop.entity.Guest;
 import fr.unice.miage.gamestershop.entity.LineItem;
+import fr.unice.miage.gamestershop.enumeration.Pegi;
 import fr.unice.miage.gamestershop.manager.GameGenderManager;
 import fr.unice.miage.gamestershop.manager.GameManager;
 import fr.unice.miage.gamestershop.manager.GamePlatformManager;
@@ -18,6 +19,7 @@ import fr.unice.miage.gamestershop.manager.GuestManager;
 import fr.unice.miage.gamestershop.utils.GameParser;
 import fr.unice.miage.gamestershop.utils.GuestParser;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -39,7 +41,7 @@ import javax.servlet.http.HttpSession;
             urlPatterns={"/Loader"},
             initParams = {
     //IMPORTANT: METTRE ICI LE CHEMIN OU SE TROUVE LA RACINE DE VOTRE PROJET
-                @WebInitParam(name="ressourceDir", value="D:\\Projets\\Miage\\M1\\NetBeans\\gamestershop")
+                @WebInitParam(name="ressourceDir", value="C:\\Users\\Mousztomania\\Documents\\Workspace\\gamestershop")
             }
 )
 public class Loader extends HttpServlet {
@@ -87,7 +89,7 @@ public class Loader extends HttpServlet {
         platformManager.save(platform);
         platform = new GamePlatform("Consoles et accessoires");
         platformManager.save(platform);
-        
+
         GameGender gender = new GameGender("Action");
         genderManager.save(gender);
         gender = new GameGender("Adventure");
@@ -131,7 +133,6 @@ public class Loader extends HttpServlet {
         gender = new GameGender("Word Games");
         genderManager.save(gender);
 
-
         //Ajout des jeux à partir de la base de données d'Amazon
         GameParser parser = new GameParser(platformManager.getAllPlatforms(), genderManager.getAllGenders());
         Iterator<Game> listeJeux = parser.listeJeux.iterator();
@@ -152,9 +153,13 @@ public class Loader extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         Collection<GamePlatform> platforms = platformManager.getAllPlatforms();
+        Collection<GameGender> genders = genderManager.getAllGenders();
+        Pegi[] pegis = Pegi.values();
 
         HttpSession session = request.getSession(true);
         session.setAttribute("platforms", platforms);
+        session.setAttribute("genders", genders);
+        session.setAttribute("pegis",pegis);
 
         session.setAttribute("basket", new LinkedList<LineItem>());
         

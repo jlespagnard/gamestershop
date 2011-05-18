@@ -17,7 +17,7 @@
         <div dojoType="dijit.layout.ContentPane" title="Produits">
             <ul>
                 <li><a href="#" onclick="getListProducts(0);">Liste</a></li>
-                <li>Ajouter un produit</li>
+                <li><a href="addProduct.jsp">Ajouter un produit</a></li>
             </ul>
         </div>
         <div dojoType="dijit.layout.ContentPane" title="Commandes" selected="true">

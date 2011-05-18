@@ -44,6 +44,8 @@
             dojo.require("dijit.form.ValidationTextBox");
             dojo.require("dijit.form.TextBox");
             dojo.require("dijit.form.Button");
+            dojo.require("dijit.form.DateTextBox");
+            dojo.require("dijit.form.MultiSelect");
             dojo.require("dijit.layout.AccordionContainer");
         </script>
         <script src="js/script.js" type="text/javascript" djConfig="parseOnLoad: true"></script>
@@ -58,23 +60,23 @@
                         <span dojoType="dijit.Tooltip" connectId="imgHome">Home</span>&nbsp;
                         <c:choose>
                             <c:when test="${sessionScope['guest'] == null}">
-                                <img src="images/login.png" id="imgLogin" onclick="showConnectionDialog();" />
+                                <img src="images/login.png" id="imgLogin" onclick="showConnectionDialog();" border="0"/>
                                 <div dojoType="dijit.Tooltip" connectId="imgLogin">Login</div>&nbsp;
-                                <img src="images/signup.png" id="imgSignup" onclick="showSignupDialog(-1);" />
+                                <img src="images/signup.png" id="imgSignup" onclick="showSignupDialog(-1);" border="0"/>
                                 <div dojoType="dijit.Tooltip" connectId="imgSignup">Sign&nbsp;up</div>&nbsp;
                             </c:when>
                             <c:otherwise>
-                                <a href="profil.jsp"><img src="images/profil.png" id="imgProfil" /></a>
+                                <a href="profil.jsp"><img src="images/profil.png" id="imgProfil" border="0" /></a>
                                 <div dojoType="dijit.Tooltip" connectId="imgProfil">Profil</div>&nbsp;
-                                <a href="DisconnectGuest"><img src="images/disconnect.png" id="imgDisconnect" /></a>
+                                <a href="DisconnectGuest"><img src="images/disconnect.png" id="imgDisconnect" border="0"/></a>
                                 <div dojoType="dijit.Tooltip" connectId="imgDisconnect">Disconnect</div>&nbsp;
                                 <c:if test="${sessionScope['guest'].email == 'admin@admin.fr'}">
-                                    <a href="admin.jsp"><img src="images/admin.png" id="imgAdmin" /></a>
+                                    <a href="admin.jsp"><img src="images/admin.png" id="imgAdmin" boder="0"/></a>
                                     <div dojoType="dijit.Tooltip" connectId="imgAdmin">Admin&nbsp;Console</div>&nbsp;
                                 </c:if>
                             </c:otherwise>
                         </c:choose>
-                        <a href="basket.jsp"><img src="images/caddie.png" id="imgBasket" /></a>
+                        <a href="basket.jsp"><img src="images/caddie.png" id="imgBasket" border="0"/></a>
                         <div dojoType="dijit.Tooltip" connectId="imgBasket">Basket</div>
                         <input type="hidden" id="actionHeader" name="actionHeader" value="" />
                     </form>
@@ -155,7 +157,7 @@
                             <td><input type="text" id="billingAddressCity_sign" name="billingAddressCity_sign" required="true" trim="false" dojoType="dijit.form.TextBox" /></td>
                         </tr>
                         <tr>
-                            <td>Countrie</td>
+                            <td>Country</td>
                             <td><input type="text" id="billingAddressCountrie_sign" name="billingAddressCountrie_sign" required="true" trim="false" dojoType="dijit.form.TextBox" /></td>
                         </tr>
                     </table>
@@ -190,7 +192,7 @@
                                 <td><input type="text" id="shippingAddressCity_sign" name="shippingAddressCity_sign" required="true" trim="false" dojoType="dijit.form.TextBox" /></td>
                             </tr>
                             <tr>
-                                <td>Countrie</td>
+                                <td>Country</td>
                                 <td><input type="text" id="shippingAddressCountrie_sign" name="shippingAddressCountrie_sign" required="true" trim="false" dojoType="dijit.form.TextBox" /></td>
                             </tr>
                         </table>
@@ -198,3 +200,4 @@
                     <button dojoType="dijit.form.Button" name="signupGuestButton" style="float: right;position: relative;" onclick="signupGuest(${sessionScope['guest'].id})">Sign up</button>
                 </div>
             </div>
+   
