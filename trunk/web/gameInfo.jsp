@@ -26,7 +26,7 @@
                 Date de sortie : ${g.releaseToString}<br />
                 <c:set var="i" value="1" />
                 <c:forEach var="p" items="${g.pegis}">
-                    <img id="img_${g.id}${i}" src="${p.urlPictogram}" alt="${p.altText}" />
+                    <img id="img_${g.id}${i}" src="${p.urlPictogram}" alt="${p.altText}" width="45px" height="60px" />
                     <span dojoType="dijit.Tooltip" connectId="img_${g.id}${i}">${p.altText}</span>
                     <c:set var="i" value="${i+1}" />
                 </c:forEach>
@@ -48,6 +48,15 @@
     <div dojoType="dijit.layout.TabContainer" style="width: 100%; height: 70%;">
         <div dojoType="dijit.layout.ContentPane" title="Description" selected="true">
             ${g.description}
+        </div>
+        <div dojoType="dijit.layout.ContentPane" title="Features">
+             <c:forEach var="feature" items="${g.features}">
+                <ul>
+                    <li>
+                        ${feature}
+                    </li>
+                </ul>
+             </c:forEach>
         </div>
         <div dojoType="dijit.layout.ContentPane" title="Images">
             <div class="thumbnail">

@@ -484,3 +484,41 @@ function getListOrders(firstResult) {
         jQuery("#content").html(contentDiv);
     },"json");
 }
+
+function addProduct() {
+
+    var gender_sign_var = "{";
+        jQuery('option.[id^="gender_"]').each(function(){
+            gender_sign_var += this.value+",";
+        });
+
+    var platforms_sign_var = "{";
+        jQuery('option.[id^="plat_"]').each(function(){
+            platforms_sign_var += this.value+",";
+        });
+
+        itemsQuantities = itemsQuantities.substr(0, itemsQuantities.length-1);
+        itemsQuantities += "}";
+    jQuery.post("AddProduct", {title_sign:jQuery("#title_sign").val(),
+                            description_sign:jQuery("#description_sign").val(),
+                            cover_sign:jQuery("#cover_sign").val(),
+                            developper_sign:jQuery("#developper_sign").val(),
+                            publisher_sign:jQuery("#publisher_sign").val(),
+                            price_sign:jQuery("#price_sign").val(),
+                            quantity_sign:jQuery("#quantity_sign").val(),
+                            screenshot_sign:jQuery("#screenshot_sign").val(),
+                            features_sign:jQuery("#features_sign").val(),
+                            release_sign:jQuery("#release_sign").val(),
+                            platforms_sign:platforms_sign_var(),
+                            ESRB_sign:jQuery("#ESRB_sign").val(),
+                            gender_sign:gender_sign_var},
+            function(success) {
+                if(success) {
+                    dijit.byId('newProductForm').reset();
+                    new dijit.Dialog({title: "Product added", content: "The product has been correctly added."}).show();
+                    document.location.href="addProduct.jsp";
+                } else {
+                    new dijit.Dialog({title: "Error", content: "A problem occured."}).show();
+                }
+            },"json");
+}
