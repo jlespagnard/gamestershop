@@ -45,6 +45,7 @@ public class AddToBasket extends HttpServlet {
         Game game = gameManager.getGameById(idGame);
 
         LineItem line = new LineItem(game, 1, game.getPrice());
+        line.setId((items.size()+1)*-1);
         items.add(line);
         session.setAttribute("basket", items);
 

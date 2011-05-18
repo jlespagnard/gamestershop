@@ -43,6 +43,7 @@ public class GetListGuests extends HttpServlet {
         
         Map<String,Object> retour = new LinkedHashMap<String, Object>();
         retour.put("nbTotalGuests", guestManager.countGuests());
+        retour.put("nbGuests", guests.size());
         retour.put("guests", guests);
         response.getWriter().print(new JSONObject(retour));
     }

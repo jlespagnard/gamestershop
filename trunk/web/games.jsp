@@ -29,7 +29,7 @@
                             Date de sortie : ${g.releaseToString}<br />
                             <c:set var="i" value="1" />
                             <c:forEach var="p" items="${g.pegis}">
-                                <img id="img_${g.id}${i}" src="${p.urlPictogram}" alt="${p.altText}" />
+                                <img id="img_${g.id}${i}" src="${p.urlPictogram}" alt="${p.altText}" width="35px" height="50px" />
                                 <span dojoType="dijit.Tooltip" connectId="img_${g.id}${i}">${p.altText}</span>
                                 <c:set var="i" value="${i+1}" />
                             </c:forEach>

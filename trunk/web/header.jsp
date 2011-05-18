@@ -14,30 +14,22 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Gamestershop</title>
-        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+        <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/nihilo/nihilo.css" />
         <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/image/resources/image.css" />
-        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-        <link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen" />
-        <link rel="stylesheet" href="css/default.css" />
-        <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js" type="text/javascript" djConfig="parseOnLoad: true"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" href="css/lightbox.css" />
+        <link rel="stylesheet" type="text/css" href="css/default.css" />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js" djConfig="parseOnLoad: true"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/prototype.js"></script>
         <script type="text/javascript" src="js/scriptaculous.js?load=effects,builder"></script>
         <script type="text/javascript" src="js/lightbox.js"></script>
         <script type="text/javascript">
             dojo.require("dijit.dijit");
-            dojo.require("dijit.Menu");
-            dojo.require("dijit.layout.BorderContainer");
-            dojo.require("dijit.Tooltip");
-            dojo.require("dijit.layout.TabContainer");
-            dojo.require("dijit.layout.ContentPane");
-            dojo.require("dojo.data.api.Read");
-            dojo.require("dojo.data.ItemFileReadStore");
-            dojo.require("dojox.image.Gallery");
-            dojo.require("dojo.parser");
-            dojo.require("dojo.fx");
             dojo.require("dijit.Dialog");
+            dojo.require("dijit.Menu");
+            dojo.require("dijit.Tooltip");
             dojo.require("dijit.form.Form");
             dojo.require("dijit.form.NumberTextBox");
             dojo.require("dijit.form.CheckBox");
@@ -47,10 +39,15 @@
             dojo.require("dijit.form.DateTextBox");
             dojo.require("dijit.form.MultiSelect");
             dojo.require("dijit.layout.AccordionContainer");
+            dojo.require("dijit.layout.BorderContainer");
+            dojo.require("dijit.layout.ContentPane");
+            dojo.require("dijit.layout.TabContainer");
+            dojo.require("dojo.parser");
+            dojo.require("dojo.fx");
         </script>
-        <script src="js/script.js" type="text/javascript" djConfig="parseOnLoad: true"></script>
+        <script type="text/javascript" src="js/script.js"></script>
     </head>
-    <body class="claro">
+    <body class="nihilo">
         <div dojoType="dijit.layout.BorderContainer" class="mainContainer">
             <div id="headerPane" name="headerPane" dojoType="dijit.layout.ContentPane" region="top" refreshOnShow="true">
                 ${msgHome}<br />

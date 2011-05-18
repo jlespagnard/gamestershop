@@ -19,6 +19,7 @@
                 <table style="width: 80%;">
                     <tr class="titleTable">
                         <td colspan="4"><b>Contenu de votre panier</b></td>
+                        <td class="transcol">&nbsp;</td>
                     </tr>
                     <c:set var="totalPrice" value="0" />
                     <c:set var="index" value="0" />
@@ -32,9 +33,10 @@
                             </c:otherwise>
                         </c:choose>
                             <td style="text-align: center;"><img alt="Cover" src="${i.game.urlCover}" width="100px" height="130px" /></td>
-                            <td style="width: 50%;">${i.game.name}</td>
+                            <td style="width: 45%;">${i.game.name}</td>
                             <td style="text-align: right;width: 10%;"><input type="text" class="quantite" id="quantity_${i.game.id}" name="quantity_${i.game.id}" value="${i.quantity}" required="true" trim="true" dojoType="dijit.form.NumberTextBox" maxlength="2" style="width: 1.5em;text-align: right;" onchange="modifierQuantite(${i.game.id},${i.game.price});" /></td>
                             <td style="width: 20%;text-align: right;"><span class="subTotal" id="subTotal_${i.game.id}">${i.subTotal}</span>&nbsp;$</td>
+                            <td class="transcol"><img src="images/remove.png" onclick="removeItem(${i.id});" /></td>
                         </tr>
                         <c:set var="totalPrice" value="${totalPrice+i.subTotal}" />
                         <c:set var="index" value="${index+1}" />
