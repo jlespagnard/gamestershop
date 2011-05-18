@@ -414,7 +414,7 @@ function showItemsDialog(index) {
     var profil = "";
     profil += "<div style=\"height: 90%; overflow: atuo;\">";
     profil += " <table>";
-    for(var i in items) {
+    for(var i=0;i<items.length;i++) {
         var item = items[i];
         profil += "     <tr>";
         profil += "         <td><img alt=\"Cover\" src=\"" + item.game.urlCover + "\" width=\"100px\" height=\"130px\" /></td>";
