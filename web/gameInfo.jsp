@@ -50,41 +50,15 @@
             ${g.description}
         </div>
         <div dojoType="dijit.layout.ContentPane" title="Images">
-            <div id="page">
-                <div id="gallery">
-                    <table>
-                        <tr>
-                            <td>
-                                <c:if test="${g.urlScreenshots[0] != null}">
-                                    <div id="panel">
-                                        <img id="largeImage" src="${g.urlScreenshots[0]}" width="550px" height="auto" />
-                                        <div id="description">${g.urlScreenshots[0]}</div>
-                                    </div>
-                                </c:if>
-                            </td>
-                            <td style="width:auto;">
-                                <div id="thumbs">
-                                    <table>
-                                        <c:forEach var="url" items="${g.urlScreenshots}">
-                                            <tr>
-                                                <td>
-                                                    <img src="${url}" alt="${url}" width="100px" height="auto" />
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+            <div class="thumbnail">
+                <c:set var="index" value="0" />
+                <c:forEach var="url" items="${g.urlScreenshots}">
+                        <a title="Click to enlarge." href="${url}" rel="lightbox[screenshots]">
+                            <img id="img_${index}" src="${url}" alt="${url}" width="100px" height="auto" />
+                        </a>
+                    <c:set var="index" value="${index+1}" />
+                </c:forEach>
             </div>
-            <script>
-                dojo.query('#thumbs img').onclick( function(e){
-                    dojo.attr('largeImage','src',dojo.attr(this,'src').replace('thumb','large'));
-                    dojo.attr('description','innerHTML',dojo.attr(this,'alt'));
-                });
-            </script>
         </div>
     </div>
 </div>

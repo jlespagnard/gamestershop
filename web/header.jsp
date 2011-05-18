@@ -14,8 +14,17 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Gamestershop</title>
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+        <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/image/resources/image.css" />
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen" />
+        <link rel="stylesheet" href="css/default.css" />
         <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js" type="text/javascript" djConfig="parseOnLoad: true"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/prototype.js"></script>
+        <script type="text/javascript" src="js/scriptaculous.js?load=effects,builder"></script>
+        <script type="text/javascript" src="js/lightbox.js"></script>
         <script type="text/javascript">
             dojo.require("dijit.dijit");
             dojo.require("dijit.Menu");
@@ -38,11 +47,8 @@
             dojo.require("dijit.layout.AccordionContainer");
         </script>
         <script src="js/script.js" type="text/javascript" djConfig="parseOnLoad: true"></script>
-        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/nihilo/nihilo.css" />
-        <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/image/resources/image.css">
-        <link rel="stylesheet" href="css/default.css" />        
     </head>
-    <body class="nihilo">
+    <body class="claro">
         <div dojoType="dijit.layout.BorderContainer" class="mainContainer">
             <div id="headerPane" name="headerPane" dojoType="dijit.layout.ContentPane" region="top" refreshOnShow="true">
                 ${msgHome}<br />

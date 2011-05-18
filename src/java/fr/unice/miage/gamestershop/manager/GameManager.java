@@ -201,15 +201,60 @@ public class GameManager {
         Query q = em.createQuery("SELECT DISTINCT(g.publisher) FROM Game g");
         return q.getResultList();
     }
-
-    public Collection<Game> getGamesByIdPlatform(int platformId) {
-        Query q = em.createQuery("SELECT g FROM Game g WHERE g.platform.id = :id");
+    
+    public Game getGameById(int id) {
+        return em.find(Game.class, id);
+    }
+    
+    public Collection<String> getSuggestGameName(String name) {
+        Query q = em.createQuery("SELECT DISTINCT(g.name) FROM Game g WHERE g.name LIKE :name");
+        q.setParameter("name", name+"%");
+        
+        return q.getResultList();
+    }
+    
+    public Collection<Game> getGamesByIdPlatform(int platformId, int firstResult, int maxResult) {
+        Query q = em.createQuery("SELECT g FROM Game g WHERE g.platform.id = :id");        
         q.setParameter("id", platformId);
+        
+        q.setFirstResult(firstResult);
+        q.setMaxResults(maxResult);
 
         return q.getResultList();
     }
+    
+    public long countGamesByIdPlatform(int platformId) {
+        Query q = em.createQuery("SELECT COUNT(DISTINCT(g)) FROM Game g WHERE g.platform.id = :id");
+        q.setParameter("id", platformId);
 
-    public Game getGameById(int id) {
-        return em.find(Game.class, id);
+        return (Long)q.getSingleResult();
+    }
+    
+    public Collection<Game> getGamesByName(String name, int firstResult, int maxResult) {
+        Query q = em.createQuery("SELECT g FROM Game g WHERE g.name LIKE :name");
+        if(name.isEmpty()) {
+            q.setParameter("name", "%");
+        }
+        else {
+            name = name.replaceAll(" ", "%");
+            q.setParameter("name", name+"%");
+        }
+        q.setFirstResult(firstResult);
+        q.setMaxResults(maxResult);
+        
+        return q.getResultList();
+    }
+    
+    public long countGamesByName(String name) {
+        Query q = em.createQuery("SELECT COUNT(DISTINCT(g.id)) FROM Game g WHERE g.name LIKE :name");
+        if(name.isEmpty()) {
+            q.setParameter("name", "%");
+        }
+        else {
+            name = name.replaceAll(" ", "%");
+            q.setParameter("name", name+"%");
+        }
+        
+        return (Long)q.getSingleResult();
     }
 }

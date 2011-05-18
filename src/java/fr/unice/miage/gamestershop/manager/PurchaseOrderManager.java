@@ -26,8 +26,10 @@ public class PurchaseOrderManager {
         return order;
     }
     
-    public void remove(int idPurchaseOrder) {
-        em.remove(em.find(PurchaseOrder.class, idPurchaseOrder));
+    public PurchaseOrder remove(int idPurchaseOrder) {
+        PurchaseOrder order = em.find(PurchaseOrder.class, idPurchaseOrder);
+        em.remove(order);
+        return order;
     }
     
     public Collection<PurchaseOrder> getAllOrders(int firstResult, int maxResult) {

@@ -12,7 +12,7 @@
     <c:set var="items" value="${sessionScope['basket']}" />
     <c:choose>
         <c:when test="${items == null || fn:length(items) == 0}">
-            <span>Votre panier est vide.</span>
+            <span>Your basket is empty.</span>
         </c:when>
         <c:otherwise>
             <div dojoType="dijit.form.Form" id="orderForm" style="overflow: auto;" jsId="orderForm" encType="multipart/form-data" action="" method="">
@@ -44,7 +44,12 @@
                         <td style="text-align: right;"><span class="totalPrice" id="totalPrice">${totalPrice}</span>&nbsp;$</td>
                     </tr>
                 </table>
-                <br /><button dojoType="dijit.form.Button" name="purchaseButton" style="float: right;position: relative;" onclick="purchaseOrder(${sessionScope['guest'].id})">Order</button>
+                    <c:if test="${sessionScope['guest'] == null}">
+                        <br /><button dojoType="dijit.form.Button" name="purchaseButton" style="float: right;position: relative;" onclick="purchaseOrder(-1)">Order</button>
+                    </c:if>
+                    <c:if test="${sessionScope['guest'] != null}">
+                        <br /><button dojoType="dijit.form.Button" name="purchaseButton" style="float: right;position: relative;" onclick="purchaseOrder(${sessionScope['guest'].id})">Order</button>
+                    </c:if>
             </div>
         </c:otherwise>
     </c:choose>
